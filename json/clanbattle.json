@@ -1,0 +1,576 @@
+{
+    "modifiers": [
+        {
+            "displayName": "Normal",
+            "description": "It's the default set-up, normal everything!",
+            "colour": "#335533",
+            "weight": 100,
+            "modifiers": {
+                "quizPlayersAllowed": 6,
+                "defaultHp": 50,
+                "normalDamage": 10,
+                "critDamage": 15,
+                "critOdds": 10,
+                "missOdds": 20,
+                "quizRoundTime": 10000,
+                "quizPointModifier": 1,
+                "quizRounds": 10,
+                "freeReward": 5,
+                "winningFactionReward": 10,
+                "topThreeReward": 20,
+                "rewardModifier": 1
+            }
+        },
+        {
+            "displayName": "Gold Rush",
+            "description": "Money! You have less time to answer the quiz, but get 2x the rewards!",
+            "colour": "#FFD700",
+            "weight": 15,
+            "modifiers": {
+                "quizPlayersAllowed": 6,
+                "defaultHp": 50,
+                "normalDamage": 10,
+                "critDamage": 15,
+                "critOdds": 10,
+                "missOdds": 20,
+                "quizRoundTime": 5000,
+                "quizPointModifier": 2,
+                "quizRounds": 10,
+                "freeReward": 5,
+                "winningFactionReward": 10,
+                "topThreeReward": 20,
+                "rewardModifier": 2
+            }
+        },
+        {
+            "displayName": "Warrior",
+            "description": "You won't miss! You'll crit a whole lot more! And everyone is stronger!",
+            "colour": "#22DDAA",
+            "weight": 25,
+            "modifiers": {
+                "quizPlayersAllowed": 6,
+                "defaultHp": 75,
+                "normalDamage": 15,
+                "critDamage": 25,
+                "critOdds": 50,
+                "missOdds": 0,
+                "quizRoundTime": 10000,
+                "quizPointModifier": 1,
+                "quizRounds": 10,
+                "freeReward": 5,
+                "winningFactionReward": 10,
+                "topThreeReward": 20,
+                "rewardModifier": 1.2
+            }
+        },
+        {
+            "displayName": "Clan Co-operation",
+            "description": "Your faction needs to work toghether! The reward for being in the winning faction is doubled!",
+            "colour": "#335533",
+            "weight": 30,
+            "modifiers": {
+                "quizPlayersAllowed": 6,
+                "defaultHp": 50,
+                "normalDamage": 10,
+                "critDamage": 15,
+                "critOdds": 10,
+                "missOdds": 20,
+                "quizRoundTime": 10000,
+                "quizPointModifier": 1,
+                "quizRounds": 10,
+                "freeReward": 5,
+                "winningFactionReward": 20,
+                "topThreeReward": 20,
+                "rewardModifier": 1
+            }
+        },
+        {
+            "displayName": "Solo",
+            "description": "The rewards for being in the top three are tripled!",
+            "colour": "#335533",
+            "weight": 30,
+            "modifiers": {
+                "quizPlayersAllowed": 6,
+                "defaultHp": 50,
+                "normalDamage": 10,
+                "critDamage": 15,
+                "critOdds": 10,
+                "missOdds": 20,
+                "quizRoundTime": 10000,
+                "quizPointModifier": 1,
+                "quizRounds": 10,
+                "freeReward": 5,
+                "winningFactionReward": 10,
+                "topThreeReward": 60,
+                "rewardModifier": 1
+            }
+        },
+        {
+            "displayName": "???",
+            "description": "Things are looking rather... grim.",
+            "colour": "#000000",
+            "weight": 1,
+            "modifiers": {
+                "quizPlayersAllowed": 6,
+                "defaultHp": 5,
+                "normalDamage": 1,
+                "critDamage": 2,
+                "critOdds": 10,
+                "missOdds": 20,
+                "quizRoundTime": 6666,
+                "quizPointModifier": 6,
+                "quizRounds": 7,
+                "freeReward": 5,
+                "winningFactionReward": 15,
+                "topThreeReward": 22,
+                "rewardModifier": 1.6
+            }
+        },
+        {
+            "displayName": "One-hit Mist",
+            "description": "It'll be hard to hit you... but you're already so weak!",
+            "colour": "#EEDDFF",
+            "weight": 5,
+            "modifiers": {
+                "quizPlayersAllowed": 10,
+                "defaultHp": 1,
+                "normalDamage": 1,
+                "critDamage": 1,
+                "critOdds": 0,
+                "missOdds": 80,
+                "quizRoundTime": 10000,
+                "quizPointModifier": 1,
+                "quizRounds": 10,
+                "freeReward": 10,
+                "winningFactionReward": 15,
+                "topThreeReward": 25,
+                "rewardModifier": 1
+            }
+        },
+        {
+            "displayName": "Leprechaun's Pot",
+            "description": "The Jackpot! You'll get plenty of points from this one.",
+            "colour": "#1E4620",
+            "weight": 0,
+            "modifiers": {
+                "quizPlayersAllowed": 6,
+                "defaultHp": 50,
+                "normalDamage": 10,
+                "critDamage": 15,
+                "critOdds": 10,
+                "missOdds": 20,
+                "quizRoundTime": 10000,
+                "quizPointModifier": 10,
+                "quizRounds": 11,
+                "freeReward": 5,
+                "winningFactionReward": 10,
+                "topThreeReward": 20,
+                "rewardModifier": 3
+            }
+        }
+    ],
+    "messages": {
+        "dudUsernames": [
+            "User"
+        ],
+        "error": [
+            "This shouldn't happen! Some error occured and we'll get about fixing it. Apologies for the inconvenience!"
+        ],
+        "signedUp": [
+            "You're in, bud! You'll be a {faction} member!",
+            "Signed up and ready to go as a {faction} soldier!",
+            "Go for glory, bud! Show them that {faction} soldiers are the best!",
+            "You've got this! You're a {faction} member! Get them good!",
+            "Yeah, you're signed up! As a {faction} member!"
+        ],
+        "alreadySignedUp": [
+            "You want to sign up again?? You've gotta calm down, bud!",
+            "You're already enrolled, no backing out now!",
+            "Seriously?! You want to mess me up like that?!",
+            "Ain't no foolin' me! You're already signed up, bud!",
+            "We do not approve.",
+            "You need to calm down! I wouldn't want you dead twice!",
+            "Hey now, keep the greed down! The rewards aren't going to you twice!",
+            "Get out of here!",
+            "Back for more? This isn't a buffet!"
+        ],
+        "fewJoined": [
+            "Not enough people joined, what the hell?! You're trying to kill me?",
+            "Not enough people joined!! I'll report this to the higher ups, you scramps!",
+            "Not enough people joined, are you insane?! We're going to die out here!",
+            "Not enough people joined... Deeply disappointed, I thought you had my back!",
+            "Not enough people joined. I've been completely abandoned!",
+            "Not enough people joined! How will I test your strength now?!",
+            "Not enough people joined... The recruitment can't end here!"
+        ],
+        "battleStarted": [
+            "The adventure begins!",
+            "War entails!",
+            "A battle commences!"
+        ],
+        "battleHitText": [
+            "{attacker} hit {defender}!"
+        ],
+        "battleCritText": [
+            "{attacker} destroyed {defender}!",
+            "{attacker} was crit by {defender}!"
+        ],
+        "battleMissText": [
+            "{attacker} missed {defender}!"
+        ],
+        "battleKillText": [
+            "{attacker} killed {defender}.",
+            "{defender} was strangled by {attacker}."
+        ],
+        "notInQuiz": [
+            "You aren't a part of this quiz!",
+            "Can't mess with me so easily!",
+            "We do not approve.",
+            "Your answer is invalid!",
+            "Run while you can, scramp!"
+        ],
+        "alreadyRespondedQuiz": [
+            "You've already responded! Ain't no backing out now."
+        ],
+        "firstAnswerQuiz": [
+            "You got the first answer! You got {points} points for it. Nice one!"
+        ],
+        "correctAnswerQuiz": [
+            "You got it right! {points} points earned for your response."
+        ],
+        "wrongAnswerQuiz": [
+            "You were wrong! Unfortunate."
+        ]
+    },
+    "questions": [
+        {
+            "title": "Who created the Clash Clan originally?",
+            "answer": 1,
+            "options": [
+                "LMO",
+                "Sieggy",
+                "Citrina",
+                "Quqqo",
+                "Bassem"
+            ]
+        },
+        {
+            "title": "When was the Mining Update for Pixel Worlds released?",
+            "answer": 3,
+            "options": [
+                "September 2nd, 2020",
+                "August 25th, 2020",
+                "May 65th, 2020",
+                "August 31st, 2020",
+                "September 16th, 2020"
+            ]
+        },
+        {
+            "title": "How many planets are between the Sun & Mars?",
+            "answer": 0,
+            "options": [
+                "3",
+                "2",
+                "4"
+            ]
+        },
+        {
+            "title": "How many countries are there in Africa?",
+            "answer": 1,
+            "options": [
+                "42",
+                "54",
+                "35",
+                "22"
+            ]
+        },
+        {
+            "title": "Which oceans does Russia border?",
+            "answer": 3,
+            "options": [
+                "Atlantic & Arctic",
+                "Pacific & Indian",
+                "Arctic & Indian",
+                "Pacific & Arctic",
+                "Atlantic & Indian"
+            ]
+        },
+        {
+            "title": "Which is incorrect about Discord Nitro subscriptions?",
+            "answer": 0,
+            "options": [
+                "Up to 1080p streaming resolution",
+                "Double the message length",
+                "2 free server boosts",
+                "Ability to join up to 200 servers",
+                "Use custom emoji in other servers"
+            ]
+        },
+        {
+            "title": "What is the Superhero Event set during the month of January?",
+            "answer": 3,
+            "options": [
+                "Sir Laser",
+                "Captain Grit",
+                "Sup-a-Fly",
+                "Blackbird",
+                "Gloomy Clubber"
+            ]
+        },
+        {
+            "title": "How many times does the Earth fully rotate in a day?",
+            "answer": 1,
+            "options": [
+                "24 times",
+                "1 time",
+                "12 times",
+                "48 times",
+                "6 times"
+            ]
+        },
+        {
+            "title": "How many countries are bordering Cambodia?",
+            "answer": 0,
+            "options": [
+                "3",
+                "5",
+                "1",
+                "2"
+            ]
+        },
+        {
+            "title": "In what year did Ukraine become independant?",
+            "answer": 3,
+            "options": [
+                "1987",
+                "2003",
+                "1997",
+                "1991"
+            ]
+        },
+        {
+            "title": "When is Independance Day for the United States of America?",
+            "answer": 4,
+            "options": [
+                "August 4th",
+                "January 1st",
+                "February 31st",
+                "July 1st",
+                "July 4th",
+                "November 7th"
+            ]
+        },
+        {
+            "title": "What complexity are Spike Bombs in Pixel Worlds?",
+            "answer": 0,
+            "options": [
+                "51",
+                "49",
+                "77",
+                "100"
+            ]
+        },
+        {
+            "title": "What date was the Harmony clan publically announced?",
+            "answer": 1,
+            "options": [
+                "January 35th, 2025",
+                "February 26th, 2021",
+                "November 13th, 2020",
+                "March 4th, 2021"
+            ]
+        },
+        {
+            "title": "How many minutes are in a second?",
+            "answer": 1,
+            "options": [
+                "60",
+                "1/60",
+                "0.001",
+                "1000",
+                "16"
+            ]
+        },
+        {
+            "title": "What level did Clash get in the first 7 days?",
+            "answer": 0,
+            "options": [
+                "Level 4",
+                "Level 3",
+                "Level 2",
+                "Level 5"
+            ]
+        },
+        {
+            "title": "Which of these is a valid IP address?",
+            "answer": 0,
+            "options": [
+                "16.86.2.8",
+                "364.25.88.167",
+                "267.24.864.58",
+                "30.235.69.44.186",
+                "528.258.947"
+            ]
+        },
+        {
+            "title": "How many countries are in the arctic circle?",
+            "answer": 1,
+            "options": [
+                "5",
+                "8",
+                "3",
+                "2",
+                "4"
+            ]
+        },
+        {
+            "title": "Who was the first person to join the Harmony clan after its creation?",
+            "answer": 0,
+            "options": [
+                "Carlosboss",
+                "BubblySky",
+                "ExPotato",
+                "Testified",
+                "VanPixels"
+            ]
+        },
+        {
+            "title": "How many provinces are there in Canada?",
+            "answer": 0,
+            "options": [
+                "10 provinces",
+                "3 provinces",
+                "13 provinces",
+                "6 provinces"
+            ]
+        },
+        {
+            "title": "John has to fence his backyard. His backyard is 20m by 20m, but he only needs to fence three sides. Each fencing unit is 50cm long, and costs $14 per unit. How much would it cost to fence John's backyard?",
+            "answer": 0,
+            "options": [
+                "$1,680",
+                "$2,340",
+                "$820",
+                "$14,480",
+                "$1,920"
+            ]
+        },
+        {
+            "title": "Can a player with minor rights in a world in Pixel Worlds edit a Diploma?",
+            "answer": 0,
+            "options": [
+                "True",
+                "False"
+            ]
+        },
+        {
+            "title": "On October 2nd, 2020, how many co-leaders were in the Clash clan?",
+            "answer": 1,
+            "options": [
+                "2",
+                "3",
+                "4",
+                "5"
+            ]
+        },
+        {
+            "title": "When did the Clash clan reach level 10?",
+            "answer": 0,
+            "options": [
+                "April 4th, 2022",
+                "November 6th, 2021",
+                "September 11th, 2021",
+                "November 13th, 2021",
+                "January 28th, 2022"
+            ]
+        },
+        {
+            "title": "When is Clash & Harmony's birthday?",
+            "answer": 0,
+            "options": [
+                "March 18th",
+                "April 15th",
+                "November 28th",
+                "September 11th",
+                "June 25th"
+            ]
+        },
+        {
+            "title": "What complexity is Grass in Pixel Worlds?",
+            "answer": 1,
+            "options": [
+                "3",
+                "2",
+                "5",
+                "1",
+                "7"
+            ]
+        },
+        {
+            "title": "What is the price of the Crappy Pickaxe?",
+            "answer": 1,
+            "options": [
+                "2000 Byte Coins",
+                "2000 Gems",
+                "200 Gems",
+                "1000 Gems",
+                "100 Byte Coins"
+            ]
+        },
+        {
+            "title": "What is not required to make the Nether Exit Potion?",
+            "answer": 3,
+            "options": [
+                "Door",
+                "Bolt",
+                "Shiny Pebble",
+                "Snail",
+                "None of the above"
+            ]
+        },
+        {
+            "title": "What is the rarity of the Blue Long Minnow?",
+            "answer": 0,
+            "options": [
+                "Rare",
+                "Uncommon",
+                "Common",
+                "Ultra Rare"
+            ]
+        },
+        {
+            "title": "What complexity are Mannequins in Pixel Worlds?",
+            "answer": 0,
+            "options": [
+                "23",
+                "20",
+                "27",
+                "21",
+                "25"
+            ]
+        },
+        {
+            "title": "What was the population of the district of Guarda in Portugal in 2020?",
+            "answer": 0,
+            "options": [
+                "143,019",
+                "96,543",
+                "200,000",
+                "177,432",
+                "544,440"
+            ]
+        },
+        {
+            "title": "What is the velocity of an object accelerating at 3.5 m/s² with an initial velocity of 5.0 m/s after 18 seconds of travel?",
+            "answer": 0,
+            "options": [
+                "68 m/s",
+                "64 m/s",
+                "16 m/s²",
+                "62.5 m/s²",
+                "60 m",
+                "58 m"
+            ]
+        }
+    ]
+}
