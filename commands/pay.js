@@ -1,6 +1,5 @@
 import { UserData } from "../classes/data.js";
 import Locale from "../classes/locale.js";
-import { readJSON } from "../json.js";
 
 export const data = {
     name: 'pay',
@@ -25,14 +24,13 @@ export const data = {
         const self = interaction.member;
         const guild = interaction.guild;
         let userdata = await UserData.get(guild.id, self.user.id);
-        const config = await readJSON('config.json');
         const count = interaction.options.getInteger("points");
         const member = interaction.options.getMember("member");
         if(!member) return Locale.text(userdata.settings.locale, "PAY_INVALID_USER");
         if(member.user.bot) return Locale.text(userdata.settings.locale, "PAY_NO_BOT");
 
         if(isNaN(count) || count < 1)
-            if(!config.admins.includes(member.user.id))
+            if(!interaction.client.config.admins.includes(member.user.id))
                 return Locale.text(userdata.settings.locale, "PAY_INVALID_NUMBER");
 
         if(self.user.id == member.user.id) return Locale.text(userdata.settings.locale, "PAY_NO_SELF");

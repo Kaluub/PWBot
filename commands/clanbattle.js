@@ -1,6 +1,5 @@
 import { Modal, TextInputComponent, MessageActionRow } from "discord.js";
 import { GuildData } from "../classes/data.js";
-import { readJSON } from "../json.js";
 import Locale from "../classes/locale.js";
 import { data as clanbattle } from "../events/clanbattle.js";
 
@@ -56,10 +55,8 @@ export const data = {
         }
     ],
     execute: async ({interaction, userdata}) => {
-        const { admins } = await readJSON('config.json');
-
         if(interaction.options.getSubcommand(false) == 'test') {
-            if(!admins.includes(interaction.user.id) && !userdata.unlocked.features.includes("CLANBATTLE_MANAGER")) return Locale.text(userdata.settings.locale, "PERMISSION_ERROR");
+            if(!interaction.client.config.admins.includes(interaction.user.id) && !userdata.unlocked.features.includes("CLANBATTLE_MANAGER")) return Locale.text(userdata.settings.locale, "PERMISSION_ERROR");
             let channel = interaction.options.getChannel('channel', false);
             if(!channel) channel = interaction.channel;
             await clanbattle.execute({channel: channel, debug: true, ping: false});
@@ -69,7 +66,7 @@ export const data = {
         if(interaction.options.getSubcommand(false) == 'start') {
             const data = await GuildData.get(interaction.guild.id);
             if(data.clanBattles.cooldown > Date.now())
-                if(!admins.includes(interaction.user.id)) return Locale.text(userdata.settings.locale, "CLANBATTLE_COOLDOWN", Math.floor(data.clanBattles.cooldown / 1000));
+                if(!interaction.client.config.admins.includes(interaction.user.id)) return Locale.text(userdata.settings.locale, "CLANBATTLE_COOLDOWN", Math.floor(data.clanBattles.cooldown / 1000));
             data.clanBattles.cooldown = Date.now() + 3600000;
             await GuildData.set(interaction.guild.id, data);
             let channel = interaction.options.getChannel('channel', false);
@@ -79,7 +76,7 @@ export const data = {
         };
 
         if(interaction.options.getSubcommandGroup(false) == 'questions') {
-            if(!admins.includes(interaction.user.id) && !userdata.unlocked.features.includes("CLANBATTLE_MANAGER")) return Locale.text(userdata.settings.locale, "PERMISSION_ERROR");
+            if(!interaction.client.config.admins.includes(interaction.user.id) && !userdata.unlocked.features.includes("CLANBATTLE_MANAGER")) return Locale.text(userdata.settings.locale, "PERMISSION_ERROR");
             if(interaction.options.getSubcommand(false) == 'add') {
                 const modal = new Modal()
                     .setCustomId("clanbattle-add-question")

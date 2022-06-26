@@ -7,6 +7,7 @@ export const data = {
         let config = await readJSON('config.json');
         config.modMailChannel = new String(channel.id);
         writeJSON('config.json', config);
+        interaction.client.reloadConfig()
         return `Successfully set the mod-mail channel to ${channel}.`;
     }
 };

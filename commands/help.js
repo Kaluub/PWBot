@@ -1,5 +1,4 @@
 import { MessageEmbed, MessageActionRow, MessageButton } from "discord.js";
-import { readJSON } from "../json.js";
 import Locale from "../classes/locale.js";
 
 function baseEmbed(locale){
@@ -15,7 +14,6 @@ export const data = {
     desc: 'A list of every command.',
     usage: '/help [command]',
     execute: async ({interaction, userdata}) => {
-        const { admins } = await readJSON('config.json');
         const user = interaction.user;
 
         // Construct help menu:
@@ -26,8 +24,8 @@ export const data = {
         for(const [key, cmd] of interaction.client.commands.entries()){
             if(!cmd) continue;
             if(cmd.hidden) continue;
-            if(cmd.admin && !admins.includes(user.id)) continue;
-            if(cmd.feature && (!userdata.unlocked.features.includes(cmd.feature) || !admins.includes(user.id))) continue;
+            if(cmd.admin && !interaction.client.config.admins.includes(user.id)) continue;
+            if(cmd.feature && (!userdata.unlocked.features.includes(cmd.feature) || !interaction.client.config.admins.includes(user.id))) continue;
 
             if(currentEmbedCommands >= 7){
                 embeds.push(baseEmbed(userdata.settings.locale));

@@ -49,6 +49,13 @@ async function createProfileCard(member, rewards, userdata){
     ctx.fillStyle = '#000000';
     ctx.strokeText(`${member.user.tag}`, 336, 42, 636);
 
+    // Role icon if present
+    if(member.roles.icon) {
+        const nameSize = ctx.measureText(member.user.tag);
+        const roleIconImage = await loadImage(member.roles.icon.iconURL({format: "png", size: 32}));
+        ctx.drawImage(roleIconImage, 340 + nameSize.width, 12);
+    };
+
     ctx.fillStyle = '#505050BB';
     ctx.fillRect(336, 58, 640, 44); // Status
     ctx.fillRect(336, 108, 318, 44); // Points

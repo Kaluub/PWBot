@@ -5,7 +5,6 @@ import { UserData, GuildData } from "./classes/data.js";
 import UsageLogger from "./classes/usageLogger.js";
 import StatusLogger from "./classes/statusLogger.js";
 import Locale from "./classes/locale.js";
-import { readJSON } from "./json.js";
 import { updateSuggestion } from "./functions.js";
 import * as commands from "./commands.js";
 import modMail from "./modmail.js";
@@ -42,22 +41,18 @@ client.on('ready', async () => {
 
 client.on('messageCreate', async (msg) => {
     if(msg.author.bot) return;
-    if(!msg.guild) {
-        const config = await readJSON('config.json');
-        return await modMail(msg, config.modMailChannel);
-    }
+    if(!msg.guild) return await modMail(msg, client.config.modMailChannel);
 });
 
 client.on('interactionCreate', async (interaction) => {
     if(interaction.isCommand()){
-        const config = await readJSON('config.json');
         let userdata = await UserData.get(interaction.guild?.id, interaction.user.id);
         if(userdata.blocked) return interaction.reply(Locale.text(userdata.settings.locale, "BLOCKED"));
-        if(UserData.isLocked(interaction.user.id) && !config.admins.includes(interaction.user.id)) return interaction.reply({content: Locale.text(userdata.settings.locale, "DATA_LOCKED"), ephemeral: true});
+        if(UserData.isLocked(interaction.user.id) && !client.config.admins.includes(interaction.user.id)) return interaction.reply({content: Locale.text(userdata.settings.locale, "DATA_LOCKED"), ephemeral: true});
         const command = commands.commands.get(interaction.commandName.toLowerCase()) || commands.commands.find(cmd => cmd.aliases && cmd.aliases.includes(interaction.commandName.toLowerCase()));
         if(!command) return interaction.reply(Locale.text(userdata.settings.locale, "COMMAND_NOT_FOUND"));
-        if(command.admin && !config.admins.includes(interaction.user.id)) return interaction.reply(Locale.text(userdata.settings.locale, "ADMIN_ERROR"));
-        if(command.feature && (!userdata.unlocked.features.includes(command.feature) || !config.admins.includes(interaction.user.id))) return interaction.reply(Locale.text(userdata.settings.locale, "PERMISSION_ERROR"));
+        if(command.admin && !client.config.admins.includes(interaction.user.id)) return interaction.reply(Locale.text(userdata.settings.locale, "ADMIN_ERROR"));
+        if(command.feature && (!userdata.unlocked.features.includes(command.feature) || !client.config.admins.includes(interaction.user.id))) return interaction.reply(Locale.text(userdata.settings.locale, "PERMISSION_ERROR"));
         if(!interaction.guild && !command.noGuild) return interaction.reply(Locale.text(userdata.settings.locale, "DM_ERROR"));
         let args = [];
         interaction?.options?.data.forEach((option) => args.push(option.value ? option.value.toString() : option));
@@ -77,13 +72,12 @@ client.on('interactionCreate', async (interaction) => {
             StatusLogger.logStatus({type: "command-error", detail: error});
         };
     } else if(interaction.isContextMenu()) {
-        const config = await readJSON('config.json');
         let userdata = await UserData.get(interaction.guildId, interaction.user.id);
-        if(UserData.isLocked(interaction.user.id) && !config.admins.includes(interaction.user.id)) return interaction.reply({content: 'Unable to use this command: Your data is locked, are you in a trade?', ephemeral: true});
+        if(UserData.isLocked(interaction.user.id) && !client.config.admins.includes(interaction.user.id)) return interaction.reply({content: 'Unable to use this command: Your data is locked, are you in a trade?', ephemeral: true});
         const command = commands.contexts.get(interaction.commandName) || commands.contexts.find(cmd => cmd.aliases && cmd.aliases.includes(interaction.commandName));
         if(!command) return interaction.reply(Locale.text(userdata.settings.locale, "COMMAND_NOT_FOUND"));
-        if(command.admin && !config.admins.includes(interaction.user.id)) return interaction.reply({content: Locale.text(userdata.settings.locale, "ADMIN_ERROR"), ephemeral: true});
-        if(command.feature && (!userdata.unlocked.features.includes(command.feature) || !config.admins.includes(interaction.user.id))) return interaction.reply(Locale.text(userdata.settings.locale, "PERMISSION_ERROR"));
+        if(command.admin && !client.config.admins.includes(interaction.user.id)) return interaction.reply({content: Locale.text(userdata.settings.locale, "ADMIN_ERROR"), ephemeral: true});
+        if(command.feature && (!userdata.unlocked.features.includes(command.feature) || !client.config.admins.includes(interaction.user.id))) return interaction.reply(Locale.text(userdata.settings.locale, "PERMISSION_ERROR"));
         if(!interaction.guild && !command.noGuild) return interaction.reply(Locale.text(userdata.settings.locale, "DM_ERROR"));
         if(userdata.settings.autoLocale) userdata.settings.locale = interaction.locale;
         userdata.addStatistic('commandsUsed');

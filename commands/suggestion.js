@@ -1,5 +1,4 @@
 import { MessageEmbed, MessageActionRow, MessageButton } from "discord.js";
-import { readJSON } from "../json.js";
 import { updateSuggestion } from "../functions.js";
 import { GuildData } from "../classes/data.js";
 import Locale from "../classes/locale.js";
@@ -110,8 +109,6 @@ export const data = {
         }
     ],
     execute: async ({interaction, userdata}) => {
-        const { suggestionsChannel, admins } = await readJSON('config.json');
-
         if(interaction.options.getSubcommand(false) == 'create'){
             const suggestion = interaction.options.getString('suggestion');
             const category = interaction.options.getString('category');
@@ -148,7 +145,7 @@ export const data = {
             );
             
             try {
-                const channel = await interaction.client.channels.fetch(suggestionsChannel);
+                const channel = await interaction.client.channels.fetch(interaction.client.config.suggestionsChannel);
                 if(!channel) return {content: Locale.text(userdata.settings.locale, "SUGGESTION_CHANNEL_ERROR"), ephemeral: true};
                 const message = await channel.send({embeds: [embed], components: [row]});
                 await message.edit({embeds: [embed.setFooter({text: `Message ID: ${message.id}`})], components: [row]});
@@ -166,19 +163,19 @@ export const data = {
                 return {content: Locale.text(userdata.settings.locale, "SUGGESTION_IMAGE_ERROR"), ephemeral: true};
             };
         } else if(interaction.options.getSubcommand(false) == 'remove'){
-            const channel = await interaction.client.channels.fetch(suggestionsChannel);
+            const channel = await interaction.client.channels.fetch(interaction.client.config.suggestionsChannel);
             if(!channel) return Locale.text(userdata.settings.locale, "INVALID_CHANNEL");
 
             const id = interaction.options.getString('message-id');
             const message = await channel.messages.fetch(id);
 
             if(!message) return Locale.text(userdata.settings.locale, "INVALID_MESSAGE");
-            if(message.author.id != interaction.user.id && !admins.includes(interaction.user.id)) return Locale.text(userdata.settings.locale, "SUGGESTION_NOT_FOR_YOU");
+            if(message.author.id != interaction.user.id && !interaction.client.config.admins.includes(interaction.user.id)) return Locale.text(userdata.settings.locale, "SUGGESTION_NOT_FOR_YOU");
             
             await message.delete();
             return Locale.text(userdata.settings.locale, "SUGGESTION_REMOVED");
         } else if(interaction.options.getSubcommand(false) == 'note'){
-            const channel = await interaction.client.channels.fetch(suggestionsChannel);
+            const channel = await interaction.client.channels.fetch(interaction.client.config.suggestionsChannel);
             if(!channel) return Locale.text(userdata.settings.locale, "INVALID_CHANNEL");
 
             const id = interaction.options.getString('message-id');
@@ -186,7 +183,7 @@ export const data = {
 
             if(!message) return Locale.text(userdata.settings.locale, "INVALID_MESSAGE");
             if(message.author.id != message.client.user.id) return Locale.text(userdata.settings.locale, "INVALID_MESSAGE");
-            if(message.author.id != interaction.user.id && !admins.includes(interaction.user.id)) return Locale.text(userdata.settings.locale, "SUGGESTION_NOT_FOR_YOU");
+            if(message.author.id != interaction.user.id && !interaction.client.config.admins.includes(interaction.user.id)) return Locale.text(userdata.settings.locale, "SUGGESTION_NOT_FOR_YOU");
             
             let data = await GuildData.get(interaction.guildId);
             if(data.suggestions[message.id])
@@ -195,8 +192,8 @@ export const data = {
             await updateSuggestion(data.suggestions[message.id], message);
             return Locale.text(userdata.settings.locale, "SUGGESTION_NOTE_ADDED");
         } else if(interaction.options.getSubcommand(false) == 'staffnote'){
-            if(!admins.includes(interaction.user.id)) return Locale.text(userdata.settings.locale, "ADMIN_ERROR");
-            const channel = await interaction.client.channels.fetch(suggestionsChannel);
+            if(!interaction.client.config.admins.includes(interaction.user.id)) return Locale.text(userdata.settings.locale, "ADMIN_ERROR");
+            const channel = await interaction.client.channels.fetch(interaction.client.config.suggestionsChannel);
             if(!channel) return Locale.text(userdata.settings.locale, "INVALID_CHANNEL");
 
             const id = interaction.options.getString('message-id');

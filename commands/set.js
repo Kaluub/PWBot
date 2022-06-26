@@ -11,7 +11,6 @@ export const data = {
     usage: '/set',
     execute: async ({interaction}) => {
         await interaction.deferReply();
-        const { admins } = await readJSON('config.json');
         const guild = interaction.guild;
         const member = interaction.member;
 
@@ -41,7 +40,7 @@ export const data = {
         const collector = msg.createMessageComponentCollector({idle: 120000});
         
         collector.on('collect', async int => {
-            if(!admins.includes(int.user.id) && int.user.id !== member.user.id) return await int.reply({content: Locale.text(userdata.settings.locale, "NOT_FOR_YOU"), ephemeral: true});
+            if(!interaction.client.config.admins.includes(int.user.id) && int.user.id !== member.user.id) return await int.reply({content: Locale.text(userdata.settings.locale, "NOT_FOR_YOU"), ephemeral: true});
             
             await int.deferUpdate();
 
