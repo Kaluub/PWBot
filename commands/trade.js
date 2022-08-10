@@ -45,7 +45,7 @@ async function trade(msg, member, partner, locale) {
         if(!trade.has(int.user.id)) return int.reply(Locale.text(locale, "TRADE_NOT_FOR_YOU"));
 
         if(int.customId === 'add-item') {
-            const data = await UserData.get(int.guild.id, int.user.id);
+            const data = await UserData.get(int.user.id);
             const tradeData = trade.get(int.user.id);
             if(tradeData.items.length >= 8) return await int.reply({content: Locale.text(locale, "TRADE_MAX_ITEMS"), ephemeral: true})
 
@@ -130,7 +130,7 @@ async function trade(msg, member, partner, locale) {
             const mCol = int.channel.createMessageCollector({filter: m => m.author.id == int.user.id, time: 30000});
             
             mCol.on('collect', async m => {
-                const userdata = await UserData.get(m.guild.id, m.author.id);
+                const userdata = await UserData.get(m.author.id);
                 let points = parseInt(m.content);
                 if(isNaN(points) || points < 0 || userdata.points < points){
                     await int.followUp({content: Locale.text(locale, "TRADE_POINTS_INVALID"), ephemeral: true});
@@ -209,8 +209,8 @@ async function updateTradeEmbed({trade, rewards, locale}, closing = false) {
 };
 
 async function endTrade({trade, rewards, member, partner}){
-    let memberdata = await UserData.get(member.guild.id, member.user.id);
-    let partnerdata = await UserData.get(partner.guild.id, partner.user.id);
+    let memberdata = await UserData.get(member.user.id);
+    let partnerdata = await UserData.get(partner.user.id);
 
     const memberTrade = trade.get(member.user.id);
     const partnerTrade = trade.get(partner.user.id);
@@ -246,8 +246,8 @@ async function endTrade({trade, rewards, member, partner}){
     
     memberdata.statistics.tradesCompleted += 1;
     partnerdata.statistics.tradesCompleted += 1;
-    await UserData.set(member.guild.id, member.user.id, memberdata);
-    await UserData.set(partner.guild.id, partner.user.id, partnerdata);
+    await UserData.set(member.user.id, memberdata);
+    await UserData.set(partner.user.id, partnerdata);
     UserData.unlockIds([member.user.id, partner.user.id]);
 };
 

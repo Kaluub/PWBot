@@ -185,9 +185,9 @@ async function endQuiz({battle, msg}) {
         let points = battle.modifiers.freeReward;
         if(member.faction == winningFaction || winningFaction == 'both') points += battle.modifiers.winningFactionReward;
         if(topThree.some(u => u.id == member.id)) points += battle.modifiers.topThreeReward;
-        const data = await UserData.get(msg.guild.id, member.id);
+        const data = await UserData.get(member.id);
         data.addPoints(Math.floor(points * battle.modifiers.rewardModifier));
-        if(!battle.debug) await UserData.set(msg.guild.id, member.id, data);
+        if(!battle.debug) await UserData.set(member.id, data);
     };
 
     let topThreeString = ``;

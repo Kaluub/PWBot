@@ -11,7 +11,7 @@ export const data = {
         if(member.user.bot) return 'That is a bot!';
         
         const rewards = await readJSON('json/rewards.json');
-        const userdata = await UserData.get(interaction.guild.id, member.id);
+        const userdata = await UserData.get(member.id);
         const buffer = await createProfileCard(member, rewards, userdata);
         const attachment = new MessageAttachment(buffer, 'card.png');
         return {content: `Here is ${member.user.username}'s profile card:`, files: [attachment]};

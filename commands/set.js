@@ -15,7 +15,7 @@ export const data = {
         const member = interaction.member;
 
         const rewards = await readJSON('json/rewards.json');
-        let userdata = await UserData.get(guild.id, member.user.id);
+        let userdata = await UserData.get(member.user.id);
 
         const backgroundMenu = new MessageSelectMenu().setCustomId('set-background').setPlaceholder(Locale.text(userdata.settings.locale, "SET_BACKGROUND"));
         await userdata.unlocked.backgrounds.forEach(async id => {
@@ -47,13 +47,13 @@ export const data = {
             if(int.customId == 'set-background') {
                 if(userdata.card.background != "smile_background") {
                     userdata.card.background = int.values[0];
-                    userdata = await UserData.set(guild.id, member.user.id, userdata);
+                    userdata = await UserData.set(member.user.id, userdata);
                 };
             };
 
             if(int.customId == 'set-frame') {
                 userdata.card.frame = int.values[0];
-                userdata = await UserData.set(guild.id, member.user.id, userdata);
+                userdata = await UserData.set(member.user.id, userdata);
             };
 
             await msg.removeAttachments();

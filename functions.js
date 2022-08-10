@@ -3,7 +3,7 @@ import { createCanvas, loadImage } from "canvas";
 import { readJSON } from "./json.js";
 
 // Creates the profile card:
-async function createProfileCard(member, rewards, userdata){
+async function createProfileCard(member, rewards, userdata) {
     const canvas = createCanvas(1000,350);
     const ctx = canvas.getContext('2d');
 
@@ -89,7 +89,7 @@ async function createProfileCard(member, rewards, userdata){
 };
 
 // Updates a suggestion embed (used multiple times, so a function helped)
-async function updateSuggestion(data, message){
+async function updateSuggestion(data, message) {
     const net = data.positive - data.negative;
     let color = '#222277';
     if(net > 9) color = '#55FF55';
@@ -117,8 +117,13 @@ async function updateSuggestion(data, message){
 };
 
 // Helper for random integer between 2 specific values
-function randInt(min = 0, max = 1){
+function randInt(min = 0, max = 1) {
     return Math.floor(Math.random() * (max - min)) + min;
 };
 
-export { updateSuggestion, randInt, createProfileCard };
+function getDateString() {
+    const now = new Date(Date.now());
+    return `${now.getUTCDate()}/${now.getUTCMonth() + 1}/${now.getUTCFullYear()}`;
+}
+
+export { updateSuggestion, randInt, getDateString, createProfileCard };

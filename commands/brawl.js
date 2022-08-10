@@ -135,7 +135,7 @@ async function updateFight(battle, {canvas, ctx, duels}, channel){
 
 export const data = {
     name: 'brawl',
-    aliases: ['duel', 'duelmega', 'brawl'],
+    aliases: ['duel', 'brawl'],
     desc: 'Brawl with other members!',
     usage: '/brawl [stats/@member(s))]',
     admin: false,

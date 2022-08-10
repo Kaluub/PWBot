@@ -138,65 +138,6 @@ export const data = {
             ]
         },
         {
-            "name": "list",
-            "description": "Manage the member lists.",
-            "type": "SUB_COMMAND_GROUP",
-            "options": [
-                {
-                    "name": "create",
-                    "description": "Create a new member list.",
-                    "type": "SUB_COMMAND",
-                    "options": [
-                        {
-                            "name": "clan",
-                            "description": "The clan of the member list to update.",
-                            "type": "STRING",
-                            "required": true,
-                            "choices": [
-                                {
-                                    "name": "clash",
-                                    "value": "clash"
-                                },
-                                {
-                                    "name": "harmony",
-                                    "value": "harmony"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "main",
-                            "description": "Do not use unless it is the main member list.",
-                            "type": "BOOLEAN",
-                            "required": false
-                        }
-                    ]
-                },
-                {
-                    "name": "update",
-                    "description": "Update the main member list.",
-                    "type": "SUB_COMMAND",
-                    "options": [
-                        {
-                            "name": "clan",
-                            "description": "The clan of the member list to update. If not included, both are updated.",
-                            "type": "STRING",
-                            "required": false,
-                            "choices": [
-                                {
-                                    "name": "clash",
-                                    "value": "clash"
-                                },
-                                {
-                                    "name": "harmony",
-                                    "value": "harmony"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
             "name": "modmail",
             "description": "This command is used to change the mod-mail channel.",
             "type": "SUB_COMMAND",
@@ -242,6 +183,12 @@ export const data = {
                             "name": "tts",
                             "description": "Whether or not the message should use TTS.",
                             "type": "BOOLEAN",
+                            "required": false
+                        },
+                        {
+                            "name": "button",
+                            "description": "JSON object containing a single button if needed.",
+                            "type": "STRING",
                             "required": false
                         },
                         {

@@ -4,9 +4,9 @@ export const data = {
     name: 'block',
     execute: async ({interaction}) => {
         const user = interaction.options.getUser('member');
-        const userdata = await UserData.get(interaction.guild.id, user.id);
+        const userdata = await UserData.get(user.id);
         userdata.setBlocked(!userdata.blocked);
-        await UserData.set(interaction.guild.id, user.id, userdata);
+        await UserData.set(user.id, userdata);
         return {content: `${user.tag} was ${userdata.blocked ? "blocked" : "unblocked"}.`, ephemeral: true};
     }
 };

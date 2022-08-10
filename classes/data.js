@@ -31,8 +31,8 @@ class UserData {
             spent: data?.statistics?.spent ?? 0,
             earned: data?.statistics?.earned ?? 0,
             commandsUsed: data?.statistics?.commandsUsed ?? 0,
-            duelsWon: data?.statistics?.duelsWon ?? 0,
-            duelsLost: data?.statistics?.duelsLost ?? 0,
+            brawlsWon: data?.statistics?.brawlsWon ?? 0,
+            brawlsLost: data?.statistics?.brawlsLost ?? 0,
             tradesCompleted: data?.statistics?.tradesCompleted ?? 0
         };
         this.unlocked = {
@@ -44,9 +44,6 @@ class UserData {
         this.card = {
             background: data?.card?.background ?? 'default_background',
             frame: data?.card?.frame ?? 'default_frame'
-        };
-        this.duels = {
-            background: data?.duels?.backgrounds ?? 'default_background'
         };
     };
 
@@ -132,13 +129,13 @@ class UserData {
         else return false;
     };
 
-    static async get(guildID, userID){
-        const data = await users.findOne({_id: `${guildID}/${userID}`});
+    static async get(userID){
+        const data = await users.findOne({_id: userID});
         return new UserData(data);
     };
 
-    static async set(guildID, userID, data){
-        await users.updateOne({_id: `${guildID}/${userID}`}, {$set: data}, {upsert: true});
+    static async set(userID, data){
+        await users.updateOne({_id: userID}, {$set: data}, {upsert: true});
         return new UserData(data);
     };
 

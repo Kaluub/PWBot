@@ -18,10 +18,10 @@ export const data = {
         const guild = interaction.guild;
         const member = interaction.member;
         const status = interaction.options.getString("text")
-        let userdata = await UserData.get(guild.id, member.user.id);
+        let userdata = await UserData.get(member.user.id);
         if(status.length > 60) return `${Locale.text(userdata.settings.locale, "USAGE")}`;
         userdata.status = status;
-        await UserData.set(guild.id, member.user.id, userdata);
+        await UserData.set(member.user.id, userdata);
         return {
             content: status.length ? Locale.text(userdata.settings.locale, "STATUS_SET", status) : Locale.text(userdata.settings.locale, "STATUS_RESET"), 
             disableMentions: 'all'

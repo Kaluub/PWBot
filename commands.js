@@ -16,6 +16,7 @@ const contexts = dirToCollection('./contexts');
 const consoleCommands = dirToCollection('./console');
 const autoCompletes = dirToCollection('./autocompletes');
 const modals = dirToCollection('./modals');
+const buttons = dirToCollection("./buttons")
 
 const events = [];
 const eventFiles = readdirSync('./events').filter(file => file.endsWith('.js'));
@@ -24,4 +25,4 @@ for(const file of eventFiles){
     events.push(data);
 };
 
-export { commands, contexts, consoleCommands, autoCompletes, modals, events };
+export { commands, contexts, consoleCommands, autoCompletes, modals, events, buttons };

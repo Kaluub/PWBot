@@ -22,8 +22,8 @@ export const data = {
         const self = interaction.member;
         const guild = interaction.guild;
 
-        const selfdata = await UserData.get(guild.id, self.user.id);
-        let userdata = await UserData.get(guild.id, member.user.id);
+        const selfdata = await UserData.get(self.user.id);
+        let userdata = await UserData.get(member.user.id);
         let rewards = await readJSON('json/rewards.json');
 
         let msg = `${Math.random() < 0.05 ? Locale.text(selfdata.settings.locale, "PROFILE_TIPS") : ''}${Locale.text(selfdata.settings.locale, "PROFILE_CARD")}`;
@@ -39,7 +39,7 @@ export const data = {
                 msg = Locale.text(selfdata.settings.locale, "PROFILE_GOLDEN_FRAME");
                 selfdata.unlocked.frames.push('golden_frame');
             };
-            await UserData.set(guild.id, self.user.id, selfdata);
+            await UserData.set(self.user.id, selfdata);
         };
 
         const buffer = await createProfileCard(member, rewards, userdata);

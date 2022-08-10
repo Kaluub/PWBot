@@ -23,7 +23,7 @@ export const data = {
     execute: async ({interaction}) => {
         const self = interaction.member;
         const guild = interaction.guild;
-        let userdata = await UserData.get(guild.id, self.user.id);
+        let userdata = await UserData.get(self.user.id);
         const count = interaction.options.getInteger("points");
         const member = interaction.options.getMember("member");
         if(!member) return Locale.text(userdata.settings.locale, "PAY_INVALID_USER");
@@ -38,12 +38,12 @@ export const data = {
         if(Date.now() - userdata.statistics.age < 1210000000) return Locale.text(userdata.settings.locale, "PAY_COOLDOWN");
         if(userdata.points < count) return Locale.text(userdata.settings.locale, "PAY_USER_BROKE", count - userdata.points);
         
-        let userdata2 = await UserData.get(guild.id, member.user.id);
+        let userdata2 = await UserData.get(member.user.id);
         
         userdata.points -= count;
         userdata2.points += count;
-        await UserData.set(guild.id, self.user.id, userdata);
-        await UserData.set(guild.id, member.user.id, userdata2);
+        await UserData.set(self.user.id, userdata);
+        await UserData.set(member.user.id, userdata2);
         return Locale.text(userdata.settings.locale, "PAY_SUCCESS", count, member.user.username, userdata.points);
     }
 };

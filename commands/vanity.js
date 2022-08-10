@@ -12,12 +12,12 @@ export const data = {
         const member = interaction.member;
         await member.fetch();
 
-        let userdata = await UserData.get(guild.id, member.id)
+        let userdata = await UserData.get(member.id)
         const roles = readJSON('json/vanityroles.json');
         member.roles.cache.each(role => {
             if(roles.includes(role.id) && !userdata.unlocked.roles.includes(role.id)) userdata.unlocked.roles.push(role.id);
         });
-        await UserData.set(guild.id, member.user.id, userdata);
+        await UserData.set(member.user.id, userdata);
         if(userdata.unlocked.roles.length < 1) return Locale.text(userdata.settings.locale, "NO_VANITY_ROLES");
 
         let desc = Locale.text(userdata.settings.locale, "VANITY_DESC");

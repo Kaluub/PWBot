@@ -13,4 +13,4 @@ export const data = {
         };
         return choices;
     }
-}
+};

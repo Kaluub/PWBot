@@ -5,9 +5,7 @@ import { UserData, GuildData } from "./classes/data.js";
 import UsageLogger from "./classes/usageLogger.js";
 import StatusLogger from "./classes/statusLogger.js";
 import Locale from "./classes/locale.js";
-import { updateSuggestion } from "./functions.js";
 import * as commands from "./commands.js";
-import modMail from "./modmail.js";
 
 const client = new Client(commands.commands);
 
@@ -39,14 +37,10 @@ client.on('ready', async () => {
     };
 });
 
-client.on('messageCreate', async (msg) => {
-    if(msg.author.bot) return;
-    if(!msg.guild) return await modMail(msg, client.config.modMailChannel);
-});
-
 client.on('interactionCreate', async (interaction) => {
     if(interaction.isCommand()){
-        let userdata = await UserData.get(interaction.guild?.id, interaction.user.id);
+        let userdata = await UserData.get(interaction.user.id);
+        if(userdata.settings.autoLocale) userdata.settings.locale = interaction.locale;
         if(userdata.blocked) return interaction.reply(Locale.text(userdata.settings.locale, "BLOCKED"));
         if(UserData.isLocked(interaction.user.id) && !client.config.admins.includes(interaction.user.id)) return interaction.reply({content: Locale.text(userdata.settings.locale, "DATA_LOCKED"), ephemeral: true});
         const command = commands.commands.get(interaction.commandName.toLowerCase()) || commands.commands.find(cmd => cmd.aliases && cmd.aliases.includes(interaction.commandName.toLowerCase()));
@@ -54,14 +48,11 @@ client.on('interactionCreate', async (interaction) => {
         if(command.admin && !client.config.admins.includes(interaction.user.id)) return interaction.reply(Locale.text(userdata.settings.locale, "ADMIN_ERROR"));
         if(command.feature && (!userdata.unlocked.features.includes(command.feature) || !client.config.admins.includes(interaction.user.id))) return interaction.reply(Locale.text(userdata.settings.locale, "PERMISSION_ERROR"));
         if(!interaction.guild && !command.noGuild) return interaction.reply(Locale.text(userdata.settings.locale, "DM_ERROR"));
-        let args = [];
-        interaction?.options?.data.forEach((option) => args.push(option.value ? option.value.toString() : option));
         userdata.addStatistic('commandsUsed');
-        if(userdata.settings.autoLocale) userdata.settings.locale = interaction.locale;
-        await UserData.set(interaction.guildId, interaction.user.id, userdata);
+        await UserData.set(interaction.user.id, userdata);
         UsageLogger.logAction({guildId: interaction.guildId, channelId: interaction.channelId, userId: interaction.user.id, actionName: interaction.toString()});
         try{
-            await command.execute({interaction, args, userdata}).then(async res => {
+            await command.execute({interaction, userdata}).then(async res => {
                 if(res && interaction && !interaction.replied) await interaction.reply(res);
                 else if(interaction && !interaction.replied) await interaction.reply(Locale.text(userdata.settings.locale, "ERROR"));
                 readline.prompt(true);
@@ -72,7 +63,7 @@ client.on('interactionCreate', async (interaction) => {
             StatusLogger.logStatus({type: "command-error", detail: error});
         };
     } else if(interaction.isContextMenu()) {
-        let userdata = await UserData.get(interaction.guildId, interaction.user.id);
+        let userdata = await UserData.get(interaction.user.id);
         if(UserData.isLocked(interaction.user.id) && !client.config.admins.includes(interaction.user.id)) return interaction.reply({content: 'Unable to use this command: Your data is locked, are you in a trade?', ephemeral: true});
         const command = commands.contexts.get(interaction.commandName) || commands.contexts.find(cmd => cmd.aliases && cmd.aliases.includes(interaction.commandName));
         if(!command) return interaction.reply(Locale.text(userdata.settings.locale, "COMMAND_NOT_FOUND"));
@@ -81,7 +72,7 @@ client.on('interactionCreate', async (interaction) => {
         if(!interaction.guild && !command.noGuild) return interaction.reply(Locale.text(userdata.settings.locale, "DM_ERROR"));
         if(userdata.settings.autoLocale) userdata.settings.locale = interaction.locale;
         userdata.addStatistic('commandsUsed');
-        await UserData.set(interaction.guildId, interaction.user.id, userdata);
+        await UserData.set(interaction.user.id, userdata);
         UsageLogger.logAction({guildId: interaction.guildId, channelId: interaction.channelId, userId: interaction.user.id, actionName: interaction.commandName});
         try {
             await command.execute({interaction, userdata}).then(async res => {
@@ -112,7 +103,7 @@ client.on('interactionCreate', async (interaction) => {
         const modalName = args.shift();
         const modal = commands.modals.get(modalName);
         if(!modal) return await interaction.reply({content: Locale.text(interaction.locale, "COMMAND_NOT_FOUND"), ephemeral: true});
-        const userdata = await UserData.get(interaction.guildId, interaction.user.id);
+        const userdata = await UserData.get(interaction.user.id);
         try {
             const res = await modal.execute({interaction, userdata, args});
             if(res) await interaction.reply(res);
@@ -122,16 +113,18 @@ client.on('interactionCreate', async (interaction) => {
             StatusLogger.logStatus({type: "modal-error", detail: error});
         };
     } else if(interaction.isMessageComponent() && interaction.isButton()){
-        if(interaction.customId.startsWith('suggestion')){ // Suggestion:
-            const data = await GuildData.get(interaction.guildId);
-            if(!data.suggestions[interaction.message.id]) return await interaction.reply({content: `This suggestion is broken! Sorry for the inconvenience.`, ephemeral: true})
-            if(data.suggestions[interaction.message.id].voters.includes(interaction.user.id)) return await interaction.reply({content: `You've already voted for this suggestion.`, ephemeral: true});
-            const type = interaction.customId.split('-')[1];
-            data.suggestions[interaction.message.id][type] += 1;
-            data.suggestions[interaction.message.id].voters.push(interaction.user.id);
-            await GuildData.set(interaction.guildId, data);
-            await updateSuggestion(data.suggestions[interaction.message.id], interaction.message);
-            await interaction.reply({content: 'Successfully voted!', ephemeral: true});
+        const args = interaction.customId.split("-");
+        const buttonName = args.shift();
+        const button = commands.buttons.get(buttonName);
+        if(!button) return await interaction.reply({content: Locale.text(interaction.locale, "COMMAND_NOT_FOUND"), ephemeral: true});
+        const userdata = await UserData.get(interaction.user.id);
+        try {
+            const res = await button.execute({interaction, userdata, args});
+            if(res) await interaction.reply(res);
+        } catch(error){
+            console.error(error);
+            readline.prompt(true);
+            StatusLogger.logStatus({type: "button-error", detail: error});
         };
     };
 });

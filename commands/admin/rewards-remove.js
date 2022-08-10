@@ -7,7 +7,7 @@ export const data = {
         const member = interaction.options.getMember('member');
         if(member.user.bot) return `You can't remove rewards from a bot.`;
 
-        const userdata = await UserData.get(interaction.guild.id, member.user.id);
+        const userdata = await UserData.get(member.user.id);
         const rewards = await readJSON('json/rewards.json');
 
         const reward = interaction.options.getString('reward');
@@ -18,13 +18,13 @@ export const data = {
         if(item.type == 'frames' || item.type == 'backgrounds'){
             if(!userdata.hasReward(item)) return 'The user does not have this reward.';
             userdata.removeReward(item);
-            await UserData.set(interaction.guild.id, member.user.id, userdata);
+            await UserData.set(member.user.id, userdata);
             return `You removed the ${item.name} from ${member.user.tag}.`;
         } else if(item.type == 'roles'){
             if(interaction.guild.id != '636986136283185172') return 'This reward can only be handled in the Clash & Harmony discord server!';
             if(!userdata.hasReward(item)) return 'The user does not have this reward!';
             userdata.removeReward(item);
-            await UserData.set(interaction.guild.id, member.user.id, userdata);
+            await UserData.set(member.user.id, userdata);
             await member.roles.remove(item.id, `Reward removed by ${interaction.user.tag}.`);
             return `You removed the ${item.name} from ${member.user.tag}.`;
         } else {

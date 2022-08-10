@@ -9,7 +9,7 @@ export const data = {
     execute: async ({interaction}) => {
         const guild = interaction.guild;
         const member = interaction.member;
-        let userdata = await UserData.get(guild.id, member.user.id);
+        let userdata = await UserData.get(member.user.id);
 
         if(userdata.monthlyCooldown > Date.now()){
             let timeRemaining = userdata.monthlyCooldown - Date.now();
@@ -49,7 +49,7 @@ export const data = {
         msg += Locale.text(userdata.settings.locale, "MONTHLY_CONCLUSION", Math.floor(earnedPoints));
         userdata.points += Math.floor(earnedPoints);
         userdata.statistics.earned += earnedPoints;
-        await UserData.set(guild.id, member.user.id, userdata);
+        await UserData.set(member.user.id, userdata);
         return msg;
     }
 };

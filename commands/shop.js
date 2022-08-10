@@ -18,14 +18,14 @@ function BaseSelect(locale) {
 };
 
 async function purchase(int, rewards, locale) {
-    let data = await UserData.get(int.guild.id, int.user.id);
+    let data = await UserData.get(int.user.id);
 
     const reward = rewards[int.values[0]];
     if(data.hasReward(reward)) return await int.reply({content: Locale.text(locale, "SHOP_ITEM_OWNED"), ephemeral: true});
     if(data.points < reward.price) return await int.reply({content: Locale.text(locale, "SHOP_USER_BROKE"), ephemeral: true});
     data.addReward(reward);
     data.points -= reward.price;
-    await UserData.set(int.guild.id, int.user.id, data);
+    await UserData.set(int.user.id, data);
     if(reward.type == 'roles') await int.member.roles.add(reward.id, 'Delivering purchase reward.');
     return await int.reply({content: Locale.text(locale, "SHOP_TRANSACTION", reward.name), ephemeral: true});
 };

@@ -64,46 +64,6 @@
             "id": "proactive",
             "roles": ["828078924940312606"],
             "img": "proactive_badge.png"
-        },
-        "clash_coleader": {
-            "id": "clash_coleader",
-            "roles": ["636987868874670100"],
-            "img": "clash_coleader_badge.png"
-        },
-        "harmony_coleader": {
-            "id": "harmony_coleader",
-            "roles": ["813850172219326484"],
-            "img": "harmony_coleader_badge.png"
-        },
-        "clash_elder": {
-            "id": "clash_elder",
-            "roles": ["644620634575601714"],
-            "img": "clash_elder_badge.png"
-        },
-        "harmony_elder": {
-            "id": "harmony_elder",
-            "roles": ["813849026343600235"],
-            "img": "harmony_elder_badge.png"
-        },
-        "clash_veteran": {
-            "id": "clash_veteran",
-            "roles": ["644620616669986817"],
-            "img": "clash_veteran_badge.png"
-        },
-        "harmony_veteran": {
-            "id": "harmony_veteran",
-            "roles": ["813848188741353492"],
-            "img": "harmony_veteran_badge.png"
-        },
-        "clash_members": {
-            "id": "clash_members",
-            "roles": ["636987578125647923"],
-            "img": "clash_badge.png"
-        },
-        "harmony_members": {
-            "id": "harmony_members",
-            "roles": ["813870575453077504"],
-            "img": "harmony_badge.png"
         }
     }
 }
