@@ -5,7 +5,7 @@ import { getDateString, randInt } from "../functions.js";
 export const data = {
     name: 'credits',
     noGuild: true,
-    desc: 'The movie is over, Van. Let\'s go home.',
+    desc: 'The movie is over, F. Let\'s go home.',
     usage: '/credits',
     execute: async ({interaction, userdata}) => {
         const embed = new MessageEmbed()

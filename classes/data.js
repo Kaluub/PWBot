@@ -13,6 +13,7 @@ const dbclient = new MongoClient('mongodb://localhost:27017');
 const db = dbclient.db("PWBot");
 const users = db.collection("users");
 const guilds = db.collection("guilds");
+const appeals = db.collection("appeals");
 
 let lockedIds = [];
 
@@ -182,4 +183,41 @@ class GuildData {
     };
 };
 
-export { UserData, GuildData };
+const AppealStatus = {
+    OPEN: 0,
+    IN_PROGRESS: 1,
+    CLOSED: 2
+};
+
+class AppealData {
+    constructor(data) {
+        this.createdAt = data?.createdAt ?? Date.now();
+        this.authorId = data?.authorId ?? undefined;
+        this.status = data?.status ?? AppealStatus.OPEN;
+        this.messages = data?.messages ?? [];
+    };
+
+    addMessage(content, authorId, url) {
+        this.messages.push({content, authorId, url, timestamp: Date.now()});
+        return this;
+    };
+
+    static async filter(authorId = undefined, status = undefined) {
+        let filter = {};
+        if (authorId) filter.authorId = authorId;
+        if (status) filter.status = status;
+        return appeals.find(filter);
+    }
+
+    static async get(id) {
+        const data = await appeals.findOne({_id: id});
+        return new AppealData(data);
+    };
+
+    static async set(id, data) {
+        await appeals.updateOne({_id: id}, {$set: data}, {upsert: true});
+        return new AppealData(data);
+    };
+};
+
+export { UserData, GuildData, AppealData, AppealStatus };

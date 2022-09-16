@@ -1,7 +1,7 @@
 import Client from "./classes/client.js";
 import cron from "node-cron";
 import { createInterface } from "readline";
-import { UserData, GuildData } from "./classes/data.js";
+import { UserData } from "./classes/data.js";
 import UsageLogger from "./classes/usageLogger.js";
 import StatusLogger from "./classes/statusLogger.js";
 import Locale from "./classes/locale.js";
@@ -16,8 +16,7 @@ Locale.reloadLocale();
 let statusNum = 0;
 const statuses = [
     {name: 'for /help', options: {type: 'WATCHING'}},
-    {name: 'for /tutorial', options: {type: 'WATCHING'}},
-    {name: 'DMs for Mod Mail.', options: {type: 'LISTENING'}}
+    {name: 'for /tutorial', options: {type: 'WATCHING'}}
 ];
 
 client.on('ready', async () => {
@@ -33,6 +32,7 @@ client.on('ready', async () => {
     }, 30000);
 
     for(const event of commands.events) {
+        if(event.inactive) continue;
         cron.schedule(event.cronTime, async () => await event.execute({channel: client.channels.cache.get(event.channel)}), {timezone: "UTC"})
     };
 });
@@ -113,7 +113,7 @@ client.on('interactionCreate', async (interaction) => {
             StatusLogger.logStatus({type: "modal-error", detail: error});
         };
     } else if(interaction.isMessageComponent() && interaction.isButton()){
-        const args = interaction.customId.split("-");
+        const args = interaction.customId.split("/");
         const buttonName = args.shift();
         const button = commands.buttons.get(buttonName);
         if(!button) return await interaction.reply({content: Locale.text(interaction.locale, "COMMAND_NOT_FOUND"), ephemeral: true});

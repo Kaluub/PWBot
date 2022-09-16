@@ -1,5 +1,5 @@
 import Discord from "discord.js";
-import { UserData } from "../classes/data.js";
+import { UserData, AppealData } from "../classes/data.js";
 import { inspect } from "util"
 
 export const data = {
