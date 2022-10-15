@@ -1,4 +1,4 @@
-import { MessageEmbed, MessageButton, MessageSelectMenu, MessageActionRow, Collection } from "discord.js";
+import { EmbedBuilder, ButtonBuilder, SelectMenuBuilder, ActionRowBuilder, Collection, ApplicationCommandOptionType } from "discord.js";
 import { readJSON } from "../json.js";
 import { UserData } from "../classes/data.js";
 import Locale from "../classes/locale.js";
@@ -12,24 +12,24 @@ async function trade(msg, member, partner, locale) {
     trade.set(member.user.id, {id: member.user.id, tag: member.user.tag, points: 0, items: [], confirmed: false});
     trade.set(partner.user.id, {id: partner.user.id, tag: partner.user.tag, points: 0, items: [], confirmed: false});
 
-    const row = new MessageActionRow().addComponents(
-        new MessageButton()
+    const row = new ActionRowBuilder().addComponents(
+        new ButtonBuilder()
             .setCustomId('add-item')
             .setLabel(Locale.text(locale, "TRADE_BUTTON_ADD_ITEM"))
             .setStyle('PRIMARY'),
-        new MessageButton()
+        new ButtonBuilder()
             .setCustomId('remove-item')
             .setLabel(Locale.text(locale, "TRADE_BUTTON_REMOVE_ITEM"))
             .setStyle('PRIMARY'),
-        new MessageButton()
+        new ButtonBuilder()
             .setCustomId('set-points')
             .setLabel(Locale.text(locale, "TRADE_BUTTON_SET_POINTS"))
             .setStyle('PRIMARY'),
-        new MessageButton()
+        new ButtonBuilder()
             .setCustomId('confirm-trade')
             .setLabel(Locale.text(locale, "BUTTON_CONFIRM"))
             .setStyle('SUCCESS'),
-        new MessageButton()
+        new ButtonBuilder()
             .setCustomId('cancel-trade')
             .setLabel(Locale.text(locale, "BUTTON_CANCEL"))
             .setStyle('DANGER')
@@ -49,7 +49,7 @@ async function trade(msg, member, partner, locale) {
             const tradeData = trade.get(int.user.id);
             if(tradeData.items.length >= 8) return await int.reply({content: Locale.text(locale, "TRADE_MAX_ITEMS"), ephemeral: true})
 
-            const menu = new MessageSelectMenu().setCustomId('items').setPlaceholder(Locale.text(locale, "TRADE_SELECT_ADD_ITEMS"));
+            const menu = new SelectMenuBuilder().setCustomId('items').setPlaceholder(Locale.text(locale, "TRADE_SELECT_ADD_ITEMS"));
             const options = [];
             const allItems = data.unlocked.backgrounds.concat(data.unlocked.frames);
 
@@ -64,7 +64,7 @@ async function trade(msg, member, partner, locale) {
 
             menu.addOptions(options).setMinValues(1).setMaxValues(options.length > 8 ? 8 : options.length);
 
-            const reply = await int.reply({content: Locale.text(locale, "TRADE_ADD_ITEMS"), components: [new MessageActionRow().addComponents(menu)], fetchReply: true});
+            const reply = await int.reply({content: Locale.text(locale, "TRADE_ADD_ITEMS"), components: [new ActionRowBuilder().addComponents(menu)], fetchReply: true});
             const menuCollector = reply.createMessageComponentCollector({time: 60000});
 
             menuCollector.on('collect', async sInt => {
@@ -90,7 +90,7 @@ async function trade(msg, member, partner, locale) {
         if(int.customId === 'remove-item') {
             let tradeData = trade.get(int.user.id);
 
-            const menu = new MessageSelectMenu().setCustomId('items').setPlaceholder(Locale.text(locale, "TRADE_SELECT_REMOVE_ITEMS"));
+            const menu = new SelectMenuBuilder().setCustomId('items').setPlaceholder(Locale.text(locale, "TRADE_SELECT_REMOVE_ITEMS"));
             const options = [];
 
             for(const id of tradeData.items) {
@@ -102,7 +102,7 @@ async function trade(msg, member, partner, locale) {
 
             menu.addOptions(options).setMinValues(1).setMaxValues(tradeData.items.length);
 
-            const reply = await int.reply({content: Locale.text(locale, "TRADE_REMOVE_ITEMS"), components: [new MessageActionRow().addComponents(menu)], fetchReply: true});
+            const reply = await int.reply({content: Locale.text(locale, "TRADE_REMOVE_ITEMS"), components: [new ActionRowBuilder().addComponents(menu)], fetchReply: true});
             const menuCollector = reply.createMessageComponentCollector({time: 60000});
 
             menuCollector.on('collect', async sInt => {
@@ -182,7 +182,7 @@ async function trade(msg, member, partner, locale) {
 };
 
 async function updateTradeEmbed({trade, rewards, locale}, closing = false) {
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
         .setTitle(closing ? Locale.text(locale, "TRADE_TITLE_COMPLETED") : Locale.text(locale, "TRADE_TITLE"))
         .setColor(closing ? `#22DDAA` : `#AA3322`)
         .setTimestamp()
@@ -259,7 +259,7 @@ export const data = {
         {
             name: 'member',
             description: "The member to trade with.",
-            type: 'USER',
+            type: ApplicationCommandOptionType.User,
             required: true
         }
     ],
@@ -270,18 +270,18 @@ export const data = {
         if(partner.user.bot) return {content: Locale.text(userdata.settings.locale, "NO_TRADE_BOT"), ephemeral: true};
         if(member.user.id == partner.user.id) return {content: Locale.text(userdata.settings.locale, "NO_TRADE_SELF"), ephemeral: true};
 
-        const inviteEmbed = new MessageEmbed()
+        const inviteEmbed = new EmbedBuilder()
             .setTitle(Locale.text(userdata.settings.locale, "TRADE_REQUEST_TITLE"))
             .setDescription(Locale.text(userdata.settings.locale, "TRADE_REQUEST_TITLE"))
             .setColor('#664400')
             .setTimestamp()
         
-        const inviteRow = new MessageActionRow().addComponents(
-            new MessageButton()
+        const inviteRow = new ActionRowBuilder().addComponents(
+            new ButtonBuilder()
                 .setCustomId('accept')
                 .setStyle('SUCCESS')
                 .setLabel(Locale.text(userdata.settings.locale, "BUTTON_ACCEPT")),
-            new MessageButton()
+            new ButtonBuilder()
                 .setCustomId('deny')
                 .setStyle('DANGER')
                 .setLabel(Locale.text(userdata.settings.locale, "BUTTON_DENY"))

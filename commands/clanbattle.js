@@ -1,4 +1,4 @@
-import { Modal, TextInputComponent, MessageActionRow } from "discord.js";
+import { ModalBuilder, TextInputBuilder, ActionRowBuilder, ApplicationCommandOptionType } from "discord.js";
 import { GuildData } from "../classes/data.js";
 import Locale from "../classes/locale.js";
 import { data as clanbattle } from "../events/clanbattle.js";
@@ -11,12 +11,12 @@ export const data = {
         {
             "name": "test",
             "description": "Test a clan battle. Includes debug tools.",
-            "type": "SUB_COMMAND",
+            "type": ApplicationCommandOptionType.Subcommand,
             "options": [
                 {
                     "name": "channel",
                     "description": "The text channel to use.",
-                    "type": "CHANNEL",
+                    "type": ApplicationCommandOptionType.Channel,
                     "channelTypes": ["GUILD_TEXT", "GUILD_NEWS"],
                     "required": false
                 }
@@ -25,12 +25,12 @@ export const data = {
         {
             "name": "start",
             "description": "Once every hour, you can start a clan battle.",
-            "type": "SUB_COMMAND",
+            "type": ApplicationCommandOptionType.Subcommand,
             "options": [
                 {
                     "name": "channel",
                     "description": "The text channel to use.",
-                    "type": "CHANNEL",
+                    "type": ApplicationCommandOptionType.Channel,
                     "channelTypes": ["GUILD_TEXT", "GUILD_NEWS"],
                     "required": false
                 }
@@ -39,17 +39,17 @@ export const data = {
         {
             "name": "questions",
             "description": "The questions used in the clan battle.",
-            "type": "SUB_COMMAND_GROUP",
+            "type": ApplicationCommandOptionType.SubcommandGroup,
             "options": [
                 {
                     "name": "add",
                     "description": "Add a new question.",
-                    "type": "SUB_COMMAND",
+                    "type": ApplicationCommandOptionType.Subcommand,
                 },
                 {
                     "name": "remove",
                     "description": "Remove an older question.",
-                    "type": "SUB_COMMAND"
+                    "type": ApplicationCommandOptionType.Subcommand
                 }
             ]
         }
@@ -78,11 +78,11 @@ export const data = {
         if(interaction.options.getSubcommandGroup(false) == 'questions') {
             if(!interaction.client.config.admins.includes(interaction.user.id) && !userdata.unlocked.features.includes("CLANBATTLE_MANAGER")) return Locale.text(userdata.settings.locale, "PERMISSION_ERROR");
             if(interaction.options.getSubcommand(false) == 'add') {
-                const modal = new Modal()
+                const modal = new ModalBuilder()
                     .setCustomId("clanbattle-add-question")
                     .setTitle(Locale.text(userdata.settings.locale, "CLANBATTLE_ADD_QUESTION_MODAL_TITLE"))
                 
-                const questionInput = new TextInputComponent()
+                const questionInput = new TextInputBuilder()
                     .setCustomId("question-title")
                     .setLabel(Locale.text(userdata.settings.locale, "CLANBATTLE_ADD_QUESTION_MODAL_LABEL_1"))
                     .setPlaceholder(Locale.text(userdata.settings.locale, "CLANBATTLE_ADD_QUESTION_MODAL_PLACEHOLDER_1"))
@@ -91,14 +91,14 @@ export const data = {
                     .setStyle("SHORT")
                     .setRequired(true)
                 
-                const optionsInput = new TextInputComponent()
+                const optionsInput = new TextInputBuilder()
                     .setCustomId("question-options")
                     .setLabel(Locale.text(userdata.settings.locale, "CLANBATTLE_ADD_QUESTION_MODAL_LABEL_2"))
                     .setPlaceholder(Locale.text(userdata.settings.locale, "CLANBATTLE_ADD_QUESTION_MODAL_PLACEHOLDER_2"))
                     .setStyle("PARAGRAPH")
                     .setRequired(true)
                 
-                const answerInput = new TextInputComponent()
+                const answerInput = new TextInputBuilder()
                     .setCustomId("question-answer")
                     .setLabel(Locale.text(userdata.settings.locale, "CLANBATTLE_ADD_QUESTION_MODAL_LABEL_3"))
                     .setPlaceholder(Locale.text(userdata.settings.locale, "CLANBATTLE_ADD_QUESTION_MODAL_PLACEHOLDER_3"))
@@ -108,9 +108,9 @@ export const data = {
                     .setRequired(true)
                 
                 modal.addComponents(
-                    new MessageActionRow().addComponents(questionInput),
-                    new MessageActionRow().addComponents(optionsInput),
-                    new MessageActionRow().addComponents(answerInput)
+                    new ActionRowBuilder().addComponents(questionInput),
+                    new ActionRowBuilder().addComponents(optionsInput),
+                    new ActionRowBuilder().addComponents(answerInput)
                 );
 
                 return await interaction.showModal(modal);

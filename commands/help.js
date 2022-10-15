@@ -1,8 +1,8 @@
-import { MessageEmbed, MessageActionRow, MessageButton } from "discord.js";
+import { EmbedBuilder, ActionRowBuilder, ButtonBuilder } from "discord.js";
 import Locale from "../classes/locale.js";
 
 function baseEmbed(locale){
-    return new MessageEmbed()
+    return new EmbedBuilder()
         .setTitle(Locale.text(locale, "HELP_TITLE"))
         .setDescription(Locale.text(locale, "HELP_DESC"))
         .setColor('BLURPLE')
@@ -33,17 +33,17 @@ export const data = {
                 currentEmbedCommands = 0;
             };
 
-            embeds[currentEmbed].setDescription(embeds[currentEmbed].description + Locale.text(userdata.settings.locale, "HELP_ENTRY", cmd.name, cmd.desc, cmd.usage));
+            embeds[currentEmbed].setDescription(embeds[currentEmbed].data.description + Locale.text(userdata.settings.locale, "HELP_ENTRY", cmd.name, cmd.desc, cmd.usage));
             currentEmbedCommands += 1;
         };
 
         // Handle pages:
-        const row = new MessageActionRow().addComponents(
-            new MessageButton()
+        const row = new ActionRowBuilder().addComponents(
+            new ButtonBuilder()
                 .setCustomId('back')
                 .setLabel(Locale.text(userdata.settings.locale, "BUTTON_BACK"))
                 .setStyle('PRIMARY'),
-            new MessageButton()
+            new ButtonBuilder()
                 .setCustomId('next')
                 .setLabel(Locale.text(userdata.settings.locale, "BUTTON_NEXT"))
                 .setStyle('PRIMARY')

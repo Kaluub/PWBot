@@ -1,4 +1,4 @@
-import { MessageEmbed, MessageActionRow, MessageButton } from "discord.js";
+import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ApplicationCommandOptionType } from "discord.js";
 import Locale from "../classes/locale.js";
 
 export const data = {
@@ -10,67 +10,67 @@ export const data = {
         {
             "name": "description",
             "description": "The description of the embed.",
-            "type": "STRING",
+            "type": ApplicationCommandOptionType.String,
             "required": true
         },
         {
             "name": "title",
             "description": "The title of the embed.",
-            "type": "STRING",
+            "type": ApplicationCommandOptionType.String,
             "required": false
         },
         {
             "name": "color",
             "description": "The hex color code for the embed.",
-            "type": "STRING",
+            "type": ApplicationCommandOptionType.String,
             "required": false
         },
         {
             "name": "image",
             "description": "The image URL for the embed.",
-            "type": "STRING",
+            "type": ApplicationCommandOptionType.String,
             "required": false
         },
         {
             "name": "url",
             "description": "The URL of the title for the embed.",
-            "type": "STRING",
+            "type": ApplicationCommandOptionType.String,
             "required": false
         },
         {
             "name": "author",
             "description": "The author of the embed (JSON object).",
-            "type": "STRING",
+            "type": ApplicationCommandOptionType.String,
             "required": false
         },
         {
             "name": "footer",
             "description": "The footer of the embed (JSON object).",
-            "type": "STRING",
+            "type": ApplicationCommandOptionType.String,
             "required": false
         },
         {
             "name": "fields",
             "description": "The fields to add to the embed (JSON array).",
-            "type": "STRING",
+            "type": ApplicationCommandOptionType.String,
             "required": false
         },
         {
             "name": "timestamp",
             "description": "The time of the embed. Valid Date number. If the number '0' is provided, the curent time is used.",
-            "type": "STRING",
+            "type": ApplicationCommandOptionType.String,
             "required": false
         },
         {
             "name": "links",
             "description": "Up to 5 links can be included as buttons. Format: 'title,url;title2,url2'.",
-            "type": "STRING",
+            "type": ApplicationCommandOptionType.String,
             "required": false
         }
     ],
     execute: async ({interaction, userdata}) => {
-        const embed = new MessageEmbed();
-        const row = new MessageActionRow();
+        const embed = new EmbedBuilder();
+        const row = new ActionRowBuilder();
         for(const id in interaction.options.data){
             const option = interaction.options.data[id];
             try {
@@ -90,7 +90,7 @@ export const data = {
                         const data = i.split(',');
                         if (data.length !== 2) throw Locale.text(userdata.settings.locale, "EMBED_LINK_FORMAT_ERROR");
                         row.addComponents(
-                            new MessageButton()
+                            new ButtonBuilder()
                                 .setStyle("LINK")
                                 .setLabel(data[0])
                                 .setURL(data[1])

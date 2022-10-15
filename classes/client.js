@@ -1,10 +1,10 @@
-import Discord from "discord.js";
+import { Client as DiscordClient, GatewayIntentBits } from "discord.js";
 import { readdirSync } from "fs";
 import { readJSON } from "../json.js";
 
-export default class Client extends Discord.Client {
+export default class Client extends DiscordClient {
     constructor(commands) {
-        super({intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.DIRECT_MESSAGES, Discord.Intents.FLAGS.GUILD_MEMBERS]});
+        super({intents: [GatewayIntentBits.Guilds, GatewayIntentBits.DirectMessages, GatewayIntentBits.GuildMembers]});
         this.commands = commands;
         this.config = readJSON("config.json");
         this.json = this.loadJSONData();

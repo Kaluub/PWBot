@@ -1,7 +1,7 @@
 import { createCanvas, loadImage } from "canvas";
 import { readJSON } from "../json.js";
 import { randInt } from "../functions.js";
-import { MessageAttachment, MessageEmbed, MessageActionRow, MessageButton, Collection } from "discord.js";
+import { AttachmentBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, Collection, ApplicationCommandOptionType } from "discord.js";
 
 const backgroundImageBrawl = await loadImage(`./img/duels/backgrounds/brawlarena.png`);
 const backgroundImageDuel = await loadImage(`./img/duels/backgrounds/duelarena.png`);
@@ -113,8 +113,8 @@ async function updateFight(battle, {canvas, ctx, duels}, channel){
     ctx.fillText(battle.log[battle.log.length - 1], 500, 550, 950);
 
     // Return embed:
-    const attachment = new MessageAttachment(canvas.toBuffer(), 'duel.png');
-    const embed = new MessageEmbed()
+    const attachment = new AttachmentBuilder(canvas.toBuffer(), 'duel.png');
+    const embed = new EmbedBuilder()
         .setTitle(`On-going fight!`)
         .setDescription(`A fight is happening!\nRound: ${battle.round}.\nRound detail: ${battle.log[battle.log.length - 1]}\nPeople alive: ${alivePlayers.size}`)
         .setImage(`attachment://duel.png`)
@@ -143,13 +143,13 @@ export const data = {
         {
             "name": "member",
             "description": "The member(s) you'd like to brawl with.",
-            "type": "USER",
+            "type": ApplicationCommandOptionType.User,
             "required": true
         },
         {
             "name": "points",
             "description": "The amount of points to brawl for.",
-            "type": "INTEGER",
+            "type": ApplicationCommandOptionType.Integer,
             "required": false
         }
     ],
@@ -217,8 +217,8 @@ export const data = {
         if(members.size === 2) ctx.drawImage(duelvsImage, 0, 0);
         else ctx.drawImage(brawlImage, 0, 0);
 
-        const attachment = new MessageAttachment(canvas.toBuffer(), 'startduel.png');
-        const embed = new MessageEmbed()
+        const attachment = new AttachmentBuilder(canvas.toBuffer(), 'startduel.png');
+        const embed = new EmbedBuilder()
             .setTitle(`Request to fight!`)
             .setDescription(`Press the '✅' button to start the fight!${battle.amount !== 0 ? `\nPrice: ${battle.amount} points.` : ''}`)
             .setImage('attachment://startduel.png')
@@ -226,8 +226,8 @@ export const data = {
             .setTimestamp(Date.now() + 60000)
             .setColor(`#33AA33`);
 
-        const row = new MessageActionRow().addComponents(
-            new MessageButton()
+        const row = new ActionRowBuilder().addComponents(
+            new ButtonBuilder()
                 .setEmoji('✅')
                 .setStyle('SUCCESS')
                 .setCustomId('start')

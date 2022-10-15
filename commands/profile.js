@@ -1,6 +1,6 @@
 import { createProfileCard } from "../functions.js";
 import { readJSON } from "../json.js";
-import { MessageAttachment } from "discord.js";
+import { AttachmentBuilder, ApplicationCommandOptionType } from "discord.js";
 import { UserData } from "../classes/data.js";
 import Locale from "../classes/locale.js";
 
@@ -13,7 +13,7 @@ export const data = {
         {
             "name": "member",
             "description": "The member whos card to display.",
-            "type": "USER",
+            "type": ApplicationCommandOptionType.User,
             "required": false
         }
     ],
@@ -43,7 +43,7 @@ export const data = {
         };
 
         const buffer = await createProfileCard(member, rewards, userdata);
-        const attachment = new MessageAttachment(buffer, `card-of-${member.user.id}.png`);
+        const attachment = new AttachmentBuilder(buffer, `card-of-${member.user.id}.png`);
         return {content: msg, files:[attachment]};
     }
 };

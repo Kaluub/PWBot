@@ -2,7 +2,7 @@ import { UserData } from "../classes/data.js";
 import Locale from "../classes/locale.js";
 import { readJSON } from "../json.js";
 import { createProfileCard } from "../functions.js";
-import { MessageActionRow, MessageSelectMenu, MessageAttachment } from "discord.js";
+import { ActionRowBuilder, SelectMenuBuilder, AttachmentBuilder } from "discord.js";
 
 export const data = {
     name: 'set',
@@ -17,23 +17,23 @@ export const data = {
         const rewards = await readJSON('json/rewards.json');
         let userdata = await UserData.get(member.user.id);
 
-        const backgroundMenu = new MessageSelectMenu().setCustomId('set-background').setPlaceholder(Locale.text(userdata.settings.locale, "SET_BACKGROUND"));
+        const backgroundMenu = new SelectMenuBuilder().setCustomId('set-background').setPlaceholder(Locale.text(userdata.settings.locale, "SET_BACKGROUND"));
         await userdata.unlocked.backgrounds.forEach(async id => {
             const bg = rewards[id];
             backgroundMenu.addOptions({label: bg.name, value: bg.id, description: bg.desc.slice(0, 99)});
         });
 
-        const frameMenu = new MessageSelectMenu().setCustomId('set-frame').setPlaceholder(Locale.text(userdata.settings.locale, "SET_FRAME"));
+        const frameMenu = new SelectMenuBuilder().setCustomId('set-frame').setPlaceholder(Locale.text(userdata.settings.locale, "SET_FRAME"));
         await userdata.unlocked.frames.forEach(async id => {
             const fr = rewards[id];
             frameMenu.addOptions({label: fr.name, value: fr.id, description: fr.desc.slice(0, 99)});
         });
 
-        const row1 = new MessageActionRow().setComponents(backgroundMenu);
-        const row2 = new MessageActionRow().setComponents(frameMenu);
+        const row1 = new ActionRowBuilder().setComponents(backgroundMenu);
+        const row2 = new ActionRowBuilder().setComponents(frameMenu);
 
         const buffer = await createProfileCard(member, rewards, userdata);
-        const att = new MessageAttachment().setFile(buffer).setName('card.png');
+        const att = new AttachmentBuilder().setFile(buffer).setName('card.png');
 
         const msg = await interaction.editReply({content: Locale.text(userdata.settings.locale, "SET_DESC"), files: [att], components: [row1, row2], fetchReply: true});
 
@@ -58,7 +58,7 @@ export const data = {
 
             await msg.removeAttachments();
             const newbuffer = await createProfileCard(member, rewards, userdata);
-            const newatt = new MessageAttachment().setFile(newbuffer).setName('card.png');
+            const newatt = new AttachmentBuilder().setFile(newbuffer).setName('card.png');
             return await int.editReply({files: [newatt]});
         });
 

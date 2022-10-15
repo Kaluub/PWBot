@@ -1,4 +1,4 @@
-import { MessageEmbed } from "discord.js";
+import { EmbedBuilder } from "discord.js";
 import StatusLogger from "../../classes/statusLogger.js";
 
 export const data = {
@@ -13,14 +13,14 @@ export const data = {
 
         const shortenedLogs = filteredLogs.slice(-15);
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setColor('#4499DD')
             .setTitle('Logs:')
             .setDescription(`Last ${shortenedLogs.length} ${shortenedLogs.length > 1 ? 'entries' : 'entry'} out of ${filteredLogs.length.toLocaleString()} with your current filter:`)
             .setTimestamp();
 
         for(const log of shortenedLogs) {
-            embed.setDescription(embed.description + `\n\n${log.type}: ${log.detail} (<t:${Math.floor(log.timestamp / 1000)}>, <t:${Math.floor(log.timestamp / 1000)}:R>)`);
+            embed.setDescription(embed.data.description + `\n\n${log.type}: ${log.detail} (<t:${Math.floor(log.timestamp / 1000)}>, <t:${Math.floor(log.timestamp / 1000)}:R>)`);
         };
 
         return {embeds:[embed]};

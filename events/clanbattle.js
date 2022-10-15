@@ -1,4 +1,4 @@
-import { MessageEmbed, MessageActionRow, MessageButton, Collection, MessageSelectMenu } from "discord.js";
+import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, Collection, SelectMenuBuilder } from "discord.js";
 import { UserData } from "../classes/data.js";
 import { readJSON } from "../json.js";
 import { randInt } from "../functions.js";
@@ -69,7 +69,7 @@ async function tickBattle({battleData, battle, msg}) {
 };
 
 function renderBattleEmbed({battle}) {
-    return new MessageEmbed()
+    return new EmbedBuilder()
         .setTitle(`Elimination Clan Battle (${battle.round}):`)
         .setDescription('```\n' + battle.log.slice(-8).join('\n') + '\n```')
         .setColor(battle.colour)
@@ -118,7 +118,7 @@ async function tickQuiz({battleData, battle, msg}) {
 
     collector.on('end', async () => {
         if(!msg || !msg.editable) return;
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setTitle(`Quiz round ${battle.quizRound}!`)
             .setDescription(`The correct answer was:\n${data.answer}\n\n${battle.quizRound < battle.modifiers.quizRounds ? 'The next round will start in 3 seconds!' : 'This was the last round! The results are being finalized...'}\n\n**Stats:**\nFirst answer: ${firstResponder ? firstResponder : 'Nobody!'}\nSuccess percent: ${fails+answers == 0 ? '0' : Math.floor(100*(answers/(fails+answers)))}% (${answers} correct, ${fails} wrong)`)
             .setColor(battle.colour);
@@ -142,7 +142,7 @@ async function handleQuizData({battleData, battle}) {
     let string = `This is the quiz round ${battle.quizRound}! Using the buttons below, choose the correct answer. There will be ${battle.modifiers.quizRounds} rounds, each giving you ${Math.floor(battle.modifiers.quizRoundTime / 1000)} seconds to answer. Good luck!\n\nQuestion: ${data.title}\n\n`;
     let index = 0;
 
-    const menu = new MessageSelectMenu()
+    const menu = new SelectMenuBuilder()
         .setPlaceholder('Select the correct answer!')
         .setCustomId('quiz-select');
 
@@ -152,9 +152,9 @@ async function handleQuizData({battleData, battle}) {
         index += 1;
     };
 
-    const row = new MessageActionRow().setComponents(menu);
+    const row = new ActionRowBuilder().setComponents(menu);
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
         .setTitle(`Quiz round ${battle.quizRound}!`)
         .setDescription(string)
         .setColor(battle.colour)
@@ -195,7 +195,7 @@ async function endQuiz({battle, msg}) {
         topThreeString += `${m.username} with ${m.quizPoints} points!\n`;
     });
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
         .setTitle(`Clan battle done!`)
         .setDescription(`${winningFaction == 'both' ? `Both factions tied! Everyone will get the ${battle.modifiers.winningFactionReward} point bonus.` : `The ${winningFaction} faction won!`}\nAlongside this, here are the top 3 people:\n${topThreeString}`)
         .setColor(battle.colour)
@@ -244,21 +244,21 @@ export const data = {
         battle.colour = mod.colour;
         battle.modifiers = mod.modifiers;
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setTitle('Clan battle!')
             .setColor(battle.colour)
             .setDescription(`Welcome to the clan battle! Here you'll participate in text-based battles alongside your fellow clanmates, or against them! You'll be rewarded generously... if you live to see the end!\n\nDetails:\nThe elimination round begins if there are more than ${battle.modifiers.quizPlayersAllowed - 1} people! In this round, you'll fight to the death until enough of you remain!\n\nThe quiz round begins when ${battle.modifiers.quizPlayersAllowed - 1} or less people remain! Here, you'll need to be fast to answer trivia questions. First response gets bonus quiz points! Anyone else who answers within ${Math.floor(battle.modifiers.quizRoundTime / 1000)} seconds will still be rewarded.\n\nAt the end of the event, whichever faction has the most combined quiz points will win and earn ${battle.modifiers.winningFactionReward} points as a bonus! The top 3 individual scorers will receive ${battle.modifiers.topThreeReward} on top as well. Everyone gets a free ${battle.modifiers.freeReward} for participation.\n\nSign up using the button below! You've got 1 minute!`)
-            .addField('Modifier:', `We'll be using the **${battle.displayName}** rules!\n${battle.description}`)
-            .addField('Participants:', '0')
+            .addFields({name: 'Modifier:', value: `We'll be using the **${battle.displayName}** rules!\n${battle.description}`})
+            .addFields({name: 'Participants:', value: '0'})
             .setTimestamp();
         
-        const row = new MessageActionRow().addComponents(
-            new MessageButton()
+        const row = new ActionRowBuilder().addComponents(
+            new ButtonBuilder()
                 .setLabel('Join the Dark!')
                 .setStyle('SECONDARY')
                 .setEmoji('🟪')
                 .setCustomId('dark'),
-            new MessageButton()
+            new ButtonBuilder()
                 .setLabel('Join the Light!')
                 .setStyle('SECONDARY')
                 .setEmoji('🟦')
@@ -266,15 +266,15 @@ export const data = {
         );
 
         if(debug) row.addComponents(
-            new MessageButton()
+            new ButtonBuilder()
                 .setLabel('add bot user')
                 .setCustomId('dud')
                 .setStyle('DANGER'),
-            new MessageButton()
+            new ButtonBuilder()
                 .setLabel('skip')
                 .setCustomId('skip')
                 .setStyle('DANGER'),
-            new MessageButton()
+            new ButtonBuilder()
                 .setLabel('stop')
                 .setCustomId('stop')
                 .setStyle('DANGER')
@@ -329,7 +329,7 @@ export const data = {
             if(!msg || !msg?.editable) return;
             if(reason == 'force') return;
             if(battle.members.size < 2) return await msg.edit({content: `Clan battle summary:\n${randText(battleData.messages.fewJoined)}`, embeds: [], components: []});
-            const setUpEmbed = new MessageEmbed()
+            const setUpEmbed = new EmbedBuilder()
                 .setTitle('Starting soon!')
                 .setColor(battle.colour)
                 .setDescription(`${battle.members.size.toString()} of you signed up!\nYour clan battle will be starting soon! Stay on your toes!`)

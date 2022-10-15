@@ -1,47 +1,50 @@
 import Locale from "../classes/locale.js";
-import { MessageEmbed, MessageActionRow, MessageButton } from "discord.js";
-import { UserData, AppealData } from "../classes/data.js";
+import { ActionRowBuilder, ButtonBuilder } from "discord.js";
+import { AppealData } from "../classes/data.js";
+import { createAppealEmbed } from "../functions.js";
 
 export const data = {
     name: "appeal",
     execute: async ({interaction, userdata}) => {
-
-        const category = interaction.fields.getTextInputValue("category");
         const content = interaction.fields.getTextInputValue("content");
 
-        const appealEmbed = new MessageEmbed()
-            .setAuthor({name: interaction.user.tag, iconURL: interaction.user.displayAvatarURL()})
-            .setDescription(`Message from ${interaction.user}:`)
-            .addField("Category:", category)
-            .addField("Message:", content)
-            .setColor("#AAAA00")
-            .setTimestamp()
-        
-        const channel = interaction.client.channels.cache.get(interaction.client.config.modMailChannel);
-        const message = await channel.send({embeds: [appealEmbed]});
-        
-        const replyButton = new MessageButton()
+        const replyButton = new ButtonBuilder()
             .setCustomId(`appealreply/${interaction.user.id}`)
             .setLabel("Reply")
             .setStyle("PRIMARY")
         
-        const quickUnbanButton = new MessageButton()
-            .setCustomId(`appealunban/${message.id}`)
-            .setLabel("Unban")
-            .setStyle("SUCCESS")
+        const markAsHandlingButton = new ButtonBuilder()
+            .setCustomId(`appealhandle`)
+            .setLabel("Mark as handling")
+            .setStyle("SECONDARY")
         
-        const quickCloseButton = new MessageButton()
-            .setCustomId(`appealclose/${message.id}`)
+        const markAsClosedButton = new ButtonBuilder()
+            .setCustomId(`appealclose`)
             .setLabel("Close")
             .setStyle("DANGER")
         
-        const quickActionBar = new MessageActionRow()
-            .addComponents(replyButton, quickUnbanButton, quickCloseButton)
+        const quickUnbanButton = new ButtonBuilder()
+            .setCustomId(`appealunban`)
+            .setLabel("Unban")
+            .setStyle("SUCCESS")
         
-        await message.edit({components: [quickActionBar]})
-
-        await AppealData.set(message.id, new AppealData({authorId: interaction.user.id}).addMessage(content, interaction.user.id, message.url))
-
+        const quickBlockButton = new ButtonBuilder()
+            .setCustomId(`appealblock`)
+            .setLabel("Block")
+            .setStyle("DANGER")
+        
+        const quickActionBar1 = new ActionRowBuilder()
+            .addComponents(replyButton, markAsHandlingButton, markAsClosedButton)
+        
+        const quickActionBar2 = new ActionRowBuilder()
+            .addComponents(quickUnbanButton, quickBlockButton)
+        
+        const channel = interaction.client.channels.cache.get(interaction.client.config.modMailChannel);
+        const message = await channel.send({content: "Loading...", components: [quickActionBar1, quickActionBar2]});
+        const appeal = new AppealData({authorId: interaction.user.id})
+            .addMessage(content, interaction.user.id, message.url)
+        await AppealData.set(message.id, appeal);
+        await message.edit({content: " ", embeds: [createAppealEmbed(appeal)]});
         return {content: Locale.text(userdata.settings.locale, "MODMAIL_SUCCESS"), ephemeral: true};
     }
 };

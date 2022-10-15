@@ -1,6 +1,6 @@
 import Locale from "../classes/locale.js"
 import { readJSON } from "../json.js";
-import { MessageEmbed, MessageActionRow, MessageButton } from "discord.js";
+import { EmbedBuilder, ActionRowBuilder, ButtonBuilder } from "discord.js";
 
 export const data = {
     name: 'list',
@@ -12,17 +12,17 @@ export const data = {
         const member = interaction.member;
         let rewards = await readJSON('json/rewards.json');
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setColor('#33AA33')
             .setTitle(Locale.text(userdata.settings.locale, "LIST_TITLE"))
             .setDescription(Locale.text(userdata.settings.locale, "LIST_DESC"))
         
-        const row = new MessageActionRow().addComponents(
-            new MessageButton()
+        const row = new ActionRowBuilder().addComponents(
+            new ButtonBuilder()
                 .setCustomId('backgrounds')
                 .setLabel(Locale.text(userdata.settings.locale, "BUTTON_BACKGROUNDS"))
                 .setStyle('SECONDARY'),
-            new MessageButton()
+            new ButtonBuilder()
                 .setCustomId('frames')
                 .setLabel(Locale.text(userdata.settings.locale, "BUTTON_FRAMES"))
                 .setStyle('SECONDARY')
@@ -39,7 +39,7 @@ export const data = {
                 embed.setDescription(Locale.text(userdata.settings.locale, "LIST_BACKGROUNDS"));
                 for(const id of userdata.unlocked.backgrounds){
                     const background = rewards[id];
-                    embed.setDescription(embed.description + Locale.text(userdata.settings.locale, "LIST_REWARD", background.name));
+                    embed.setDescription(embed.data.description + Locale.text(userdata.settings.locale, "LIST_REWARD", background.name));
                 };
             };
 
@@ -47,11 +47,11 @@ export const data = {
                 embed.setDescription(Locale.text(userdata.settings.locale, "LIST_FRAMES"));
                 for(const id of userdata.unlocked.frames){
                     const frame = rewards[id];
-                    embed.setDescription(embed.description + Locale.text(userdata.settings.locale, "LIST_REWARD", frame.name));
+                    embed.setDescription(embed.data.description + Locale.text(userdata.settings.locale, "LIST_REWARD", frame.name));
                 };
             };
 
-            embed.setDescription(embed.description + Locale.text(userdata.settings.locale, "LIST_CONCLUSION"));
+            embed.setDescription(embed.data.description + Locale.text(userdata.settings.locale, "LIST_CONCLUSION"));
             embed.setTimestamp(Date.now() + 30000);
             await int.update({embeds:[embed]});
         });

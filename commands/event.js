@@ -1,4 +1,4 @@
-import { MessageEmbed, MessageButton, MessageActionRow } from "discord.js";
+import { EmbedBuilder, ButtonBuilder, ActionRowBuilder, ApplicationCommandOptionType } from "discord.js";
 import { GuildData } from "../classes/data.js";
 
 export const data = {
@@ -10,18 +10,18 @@ export const data = {
         {
             "name": "create",
             "description": "A command to create & start an event.",
-            "type": "SUB_COMMAND",
+            "type": ApplicationCommandOptionType.Subcommand,
             "options": [
                 {
                     "name": "name",
                     "description": "The name/theme of the event.",
-                    "type": "STRING",
+                    "type": ApplicationCommandOptionType.String,
                     "required": true
                 },
                 {
                     "name": "type",
                     "description": "The type of the event.",
-                    "type": "STRING",
+                    "type": ApplicationCommandOptionType.String,
                     "required": true,
                     "choices": [
                         {
@@ -53,25 +53,25 @@ export const data = {
                 {
                     "name": "channel",
                     "description": "The channel to post the event message in. If none is provided, the current channel is used.",
-                    "type": "CHANNEL",
+                    "type": ApplicationCommandOptionType.Channel,
                     "required": false
                 },
                 {
                     "name": "length",
                     "description": "The length of the event, in hours. If not provided, it'll default to 3 days.",
-                    "type": "INTEGER",
+                    "type": ApplicationCommandOptionType.Integer,
                     "required": false
                 },
                 {
                     "name": "points",
                     "description": "The reward of the event.",
-                    "type": "INTEGER",
+                    "type": ApplicationCommandOptionType.Integer,
                     "required": false
                 },
                 {
                     "name": "poll-options",
                     "description": "The options of a poll event, if applicable. Example: 'Option 1; Option 2; Option 3'. Max 5 options.",
-                    "type": "STRING",
+                    "type": ApplicationCommandOptionType.String,
                     "required": false
                 }
             ]
@@ -120,65 +120,65 @@ export const data = {
                 scheduledStartTime: Date.now(),
             }
 
-            const embed = new MessageEmbed()
+            const embed = new EmbedBuilder()
                 .setTitle(`(${event.id}) Event started: ${event.name}`)
                 .setAuthor({name: 'Clash & Harmony Event', iconURL: interaction.client.user.displayAvatarURL()})
-                .addField(`Event number:`, `${event.id}`)
-                .addField(`Title:`, `${event.name}`)
-                .addField(`Event time:`, event.time > 23 ? `${Math.floor(event.time / 24)} day${Math.floor(event.time) == 1 ? '' : 's'}${event.time % 24 == 0 ? `` : ` ${event.time % 24} hours`}` : `${event.time} hour${event.time % 24 == 1 ? '' : 's'}`)
+                .addFields({name: `Event number:`, value: `${event.id}`})
+                .addFields({name: `Title:`, value: `${event.name}`})
+                .addFields({name: `Event time:`, value: event.time > 23 ? `${Math.floor(event.time / 24)} day${Math.floor(event.time) == 1 ? '' : 's'}${event.time % 24 == 0 ? `` : ` ${event.time % 24} hours`}` : `${event.time} hour${event.time % 24 == 1 ? '' : 's'}`})
                 .setTimestamp(Date.now() + (event.time * 3600000));
 
             // Art contest events:
             if(event.type == 'artcontest'){
                 embed.setColor(`#D023AE`)
-                    .addField(`Description:`, `An art contest allows a way for people to submit their own creative works to the clan for use in various forms of media.`)
-                    .addField(`Rules:`, `The provided art must be related in some format to the theme.\nYou have until the provided time above & below to submit any works should you desire to do so.\nAfter this time, the voting phase begins and users can vote for whoever they feel has the best art submission.\nVoting earns you 15 free points, as an encouragement to do so!\nBy submitting your work through the Bot, you understand that your work may be used by the clan in any way, on any platform.`)
-                    .addField(`Participation:`, `To participate, you must DM the bot with either a link to the work or attach the image directly, and add the category "event submission".`)
+                    .addFields({name: `Description:`, value: `An art contest allows a way for people to submit their own creative works to the clan for use in various forms of media.`})
+                    .addFields({name: `Rules:`, value: `The provided art must be related in some format to the theme.\nYou have until the provided time above & below to submit any works should you desire to do so.\nAfter this time, the voting phase begins and users can vote for whoever they feel has the best art submission.\nVoting earns you 15 free points, as an encouragement to do so!\nBy submitting your work through the Bot, you understand that your work may be used by the clan in any way, on any platform.`})
+                    .addFields({name: `Participation:`, value: `To participate, you must DM the bot with either a link to the work or attach the image directly, and add the category "event submission".`})
             };
             // Build contest events:
             if(event.type == 'buildcontest'){
                 embed.setColor(`#FFA500`)
-                    .addField(`Description:`, `Build contests test your building capabilities in Pixel Worlds.`)
-                    .addField(`Rules:`, `The build you provide must be related to the theme in some format.\nYou have until the provided time above & below to submit your build should you desire to do so.\nAfter this time, the voting phase begins and users can vote for whoever they feel has the best build.\nVoting earns you 15 free points, as an encouragement to do so.`)
-                    .addField(`Participation:`, `To participate, you must DM the bot with either a link to a screenshot of your build or attching the screenshot directly, and add the category "event submission".`)
+                    .addFields({name: `Description:`, value: `Build contests test your building capabilities in Pixel Worlds.`})
+                    .addFields({name: `Rules:`, value: `The build you provide must be related to the theme in some format.\nYou have until the provided time above & below to submit your build should you desire to do so.\nAfter this time, the voting phase begins and users can vote for whoever they feel has the best build.\nVoting earns you 15 free points, as an encouragement to do so.`})
+                    .addFields({name: `Participation:`, value: `To participate, you must DM the bot with either a link to a screenshot of your build or attching the screenshot directly, and add the category "event submission".`})
             };
             // AMA event:
             if(event.type == 'ama'){
                 embed.setColor(`#DEA5A4`)
-                    .addField(`Description:`, `AMA events are special events in which you can ask the host of the event anything you wish to ask.`)
-                    .addField(`Rules:`, `All questions asked should be reasonably appropriate, otherwise, ask them anything! The host will answer the questions once the time is up.`)
-                    .addField(`Participation:`, `To participate, you must DM the bot with your question, and add the category "event submission".`)
+                    .addFields({name: `Description:`, value: `AMA events are special events in which you can ask the host of the event anything you wish to ask.`})
+                    .addFields({name: `Rules:`, value: `All questions asked should be reasonably appropriate, otherwise, ask them anything! The host will answer the questions once the time is up.`})
+                    .addFields({name: `Participation:`, value: `To participate, you must DM the bot with your question, and add the category "event submission".`})
             };
             // Karaoke event:
             if(event.type == 'karaoke'){
                 embed.setColor(`#DEA5A4`)
-                    .addField(`Description:`, `A Karaoke event is a gathering of members who sing however they feel, usually to a specific song.`)
-                    .addField(`Participation:`, `To participate, join the Stage channel that starts when the event begins!`)
+                    .addFields({name: `Description:`, value: `A Karaoke event is a gathering of members who sing however they feel, usually to a specific song.`})
+                    .addFields({name: `Participation:`, value: `To participate, join the Stage channel that starts when the event begins!`})
             };
             // PW event:
             if(event.type == 'pixelworldsevent'){
                 embed.setColor(`#77DD77`)
-                    .addField(`Description:`, `A Pixel Worlds event is a contest in which a challenge in Pixel Worlds is started, whether it be a parkour challenge, wiring contest, fashion contest or even something new.`)
-                    .addField(`Participation:`, `Participation depends on the content of the event — in most cases, it'll be in a Stage channel, or you'll need to submit work by sending a DM to the bot with the "event submission" category.`)
+                    .addFields({name: `Description:`, value: `A Pixel Worlds event is a contest in which a challenge in Pixel Worlds is started, whether it be a parkour challenge, wiring contest, fashion contest or even something new.`})
+                    .addFields({name: `Participation:`, value: `Participation depends on the content of the event — in most cases, it'll be in a Stage channel, or you'll need to submit work by sending a DM to the bot with the "event submission" category.`})
             };
             // Poll:
             if(event.type == 'poll'){
                 embed.setColor(`#AEC6CF`)
-                    .addField(`Description:`, `A poll! Vote for whichever option you feel is the best.`)
-                    .addField(`Participation:`, `Use the buttons below to vote for the poll.`)
+                    .addFields({name: `Description:`, value: `A poll! Vote for whichever option you feel is the best.`})
+                    .addFields({name: `Participation:`, value: `Use the buttons below to vote for the poll.`})
             };
 
             // Whether to add the reward here or not.
-            if(['artcontest', 'buildcontest'].includes(event.type)) embed.addField(`Reward:`, `The winner(s) of the contest will receive the <@&801156920106025010> role.${event.points ? `\nFor ths event, the winner(s) will also receive ${event.points} points.` : ``}`);
-            else if(event.points) embed.addField(`Reward:`, `The winner(s) will receive ${event.points} points.`);
+            if(['artcontest', 'buildcontest'].includes(event.type)) embed.addFields({name: `Reward:`, value: `The winner(s) of the contest will receive the <@&801156920106025010> role.${event.points ? `\nFor ths event, the winner(s) will also receive ${event.points} points.` : ``}`});
+            else if(event.points) embed.addFields({name: `Reward:`, value: `The winner(s) will receive ${event.points} points.`});
             
 
             // Handle event set-up:
-            let row = new MessageActionRow();
+            let row = new ActionRowBuilder();
             if(event.type == 'poll' && event.pollOptions){
                 let n = 0;
                 event.pollOptions.forEach(opt => {
-                    row.addComponents(new MessageButton().setCustomId(`poll-${n}-${event.id}`).setLabel(opt).setStyle('PRIMARY'));
+                    row.addComponents(new ButtonBuilder().setCustomId(`poll-${n}-${event.id}`).setLabel(opt).setStyle('PRIMARY'));
                     n += 1;
                 });
             };

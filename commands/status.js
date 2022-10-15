@@ -1,5 +1,6 @@
 import { UserData } from "../classes/data.js";
 import Locale from "../classes/locale.js";
+import { ApplicationCommandOptionType } from "discord.js";
 
 export const data = {
     name: 'status',
@@ -10,7 +11,7 @@ export const data = {
         {
             "name": "text",
             "description": "The text you wish to use as your status. 60 characters maximum.",
-            "type": "STRING",
+            "type": ApplicationCommandOptionType.String,
             "required": true
         }
     ],

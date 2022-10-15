@@ -1,3 +1,4 @@
+import { ApplicationCommandType } from "discord.js";
 import { UserData } from "../classes/data.js";
 
 function fix(num){
@@ -6,7 +7,7 @@ function fix(num){
 
 export const data = {
     name: 'Info',
-    type: 'USER',
+    type: ApplicationCommandType.User,
     execute: async ({interaction}) => {
         const member = interaction.options.getMember('user');
         const user = interaction.options.getUser('user');

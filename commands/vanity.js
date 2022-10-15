@@ -1,4 +1,4 @@
-import { MessageEmbed, MessageButton, MessageActionRow } from "discord.js";
+import { EmbedBuilder, ButtonBuilder, ActionRowBuilder } from "discord.js";
 import { readJSON } from "../json.js";
 import Locale from "../classes/locale.js";
 import { UserData } from "../classes/data.js";
@@ -26,33 +26,33 @@ export const data = {
             desc += `\n${member.roles.cache.has(id) ? `🟢` : `🔴`} ${role.name}`;
         };
 
-        let embed = new MessageEmbed()
+        let embed = new EmbedBuilder()
             .setTitle(Locale.text(userdata.settings.locale, "VANITY_TITLE"))
             .setDescription(desc)
             .setColor(`#228866`)
             .setTimestamp()
         
-        const row = new MessageActionRow().addComponents(
-            new MessageButton()
+        const row = new ActionRowBuilder().addComponents(
+            new ButtonBuilder()
                 .setCustomId('up')
                 .setLabel(Locale.text(userdata.settings.locale, "BUTTON_UP"))
                 .setStyle('SECONDARY'),
-            new MessageButton()
+            new ButtonBuilder()
                 .setCustomId('select')
                 .setLabel(Locale.text(userdata.settings.locale, "BUTTON_SELECT"))
                 .setStyle('SUCCESS'),
-            new MessageButton()
+            new ButtonBuilder()
                 .setCustomId('down')
                 .setLabel(Locale.text(userdata.settings.locale, "BUTTON_DOWN"))
                 .setStyle('SECONDARY'),
-            new MessageButton()
+            new ButtonBuilder()
                 .setCustomId('clean')
                 .setLabel(Locale.text(userdata.settings.locale, "BUTTON_CLEAN"))
                 .setStyle('DANGER')
         );
 
         let sel = 0;
-        let descArr = embed.description.replace('➡️ ', '').split('\n');
+        let descArr = embed.data.description.replace('➡️ ', '').split('\n');
         descArr[sel + 3] = "➡️ " + descArr[sel + 3];
         let msg = await interaction.reply({embeds:[embed.setDescription(descArr.join('\n'))], components: [row], fetchReply: true});
 
@@ -61,12 +61,12 @@ export const data = {
             if(interaction.user.id !== member.user.id) return interaction.reply({content: Locale.text(userdata.settings.locale, "NOT_FOR_YOU"), ephemeral: true});
             if(interaction.customId == 'up'){
                 sel -= 1;
-                if(sel < 0) sel = embed.description.split('\n').length - 4;
+                if(sel < 0) sel = embed.data.description.split('\n').length - 4;
             };
 
             if(interaction.customId == 'down'){
                 sel += 1;
-                if(sel >= embed.description.split('\n').length - 3) sel = 0;
+                if(sel >= embed.data.description.split('\n').length - 3) sel = 0;
             };
 
             if(interaction.customId == 'select'){
@@ -94,7 +94,7 @@ export const data = {
                 embed.setDescription(desc.replaceAll(`🟢`, `🔴`));
             };
 
-            descArr = embed.description.replaceAll('➡️ ', '').split('\n');
+            descArr = embed.data.description.replaceAll('➡️ ', '').split('\n');
             descArr[sel + 3] = "➡️ " + descArr[sel + 3];
             await interaction.update({embeds:[embed.setDescription(descArr.join('\n'))]});
         });

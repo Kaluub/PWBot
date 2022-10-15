@@ -1,4 +1,4 @@
-import { MessageEmbed } from "discord.js";
+import { EmbedBuilder } from "discord.js";
 import Locale from "../classes/locale.js";
 import { getDateString, randInt } from "../functions.js";
 
@@ -8,7 +8,7 @@ export const data = {
     desc: 'The movie is over, F. Let\'s go home.',
     usage: '/credits',
     execute: async ({interaction, userdata}) => {
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setTitle(Locale.text(userdata.settings.locale, "CREDITS_TITLE"))
             .setColor('#662211')
             .setDescription(Locale.text(userdata.settings.locale, "CREDITS_MAIN"))

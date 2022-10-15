@@ -189,6 +189,12 @@ const AppealStatus = {
     CLOSED: 2
 };
 
+const AppealMessageType = {
+    MESSAGE: 0,
+    REPLY: 1,
+    STATUS: 2
+};
+
 class AppealData {
     constructor(data) {
         this.createdAt = data?.createdAt ?? Date.now();
@@ -197,17 +203,17 @@ class AppealData {
         this.messages = data?.messages ?? [];
     };
 
-    addMessage(content, authorId, url) {
-        this.messages.push({content, authorId, url, timestamp: Date.now()});
+    addMessage(content, authorId, url, type = AppealMessageType.MESSAGE) {
+        this.messages.push({content, authorId, url, type, timestamp: Date.now()});
         return this;
     };
 
     static async filter(authorId = undefined, status = undefined) {
         let filter = {};
-        if (authorId) filter.authorId = authorId;
-        if (status) filter.status = status;
+        if (authorId != undefined) filter.authorId = authorId;
+        if (status != undefined) filter.status = status;
         return appeals.find(filter);
-    }
+    };
 
     static async get(id) {
         const data = await appeals.findOne({_id: id});
@@ -220,4 +226,4 @@ class AppealData {
     };
 };
 
-export { UserData, GuildData, AppealData, AppealStatus };
+export { UserData, GuildData, AppealData, AppealStatus, AppealMessageType };

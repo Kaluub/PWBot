@@ -1,4 +1,5 @@
 import { readdirSync } from "fs";
+import { ApplicationCommandOptionType } from "discord.js";
 
 const functions = new Map();
 const files = readdirSync("./commands/admin").filter(file => file.endsWith('.js'));
@@ -16,24 +17,24 @@ export const data = {
         {
             "name": "points",
             "description": "A command to manage point distribution.",
-            "type": "SUB_COMMAND",
+            "type": ApplicationCommandOptionType.Subcommand,
             "options": [
                 {
                     "name": "member",
                     "description": "The member to give the points to.",
-                    "type": "USER",
+                    "type": ApplicationCommandOptionType.User,
                     "required": true
                 },
                 {
                     "name": "points",
                     "description": "The amount of points to give this member.",
-                    "type": "INTEGER",
+                    "type": ApplicationCommandOptionType.Integer,
                     "required": true
                 },
                 {
                     "name": "force-set",
                     "description": "Whether the points should be set to the amount or not",
-                    "type": "BOOLEAN",
+                    "type": ApplicationCommandOptionType.Boolean,
                     "required": false
                 }
             ]
@@ -41,23 +42,23 @@ export const data = {
         {
             "name": "rewards",
             "description": "Manage the rewards from the shop.",
-            "type": "SUB_COMMAND_GROUP",
+            "type": ApplicationCommandOptionType.SubcommandGroup,
             "options": [
                 {
                     "name": "add",
                     "description": "Add a reward to a user.",
-                    "type": "SUB_COMMAND",
+                    "type": ApplicationCommandOptionType.Subcommand,
                     "options": [
                         {
                             "name": "member",
                             "description": "The member to give the reward to.",
-                            "type": "USER",
+                            "type": ApplicationCommandOptionType.User,
                             "required": true
                         },
                         {
                             "name": "reward",
                             "description": "The reward to give the member.",
-                            "type": "STRING",
+                            "type": ApplicationCommandOptionType.String,
                             "autocomplete": true,
                             "required": true
                         }
@@ -66,18 +67,18 @@ export const data = {
                 {
                     "name": "remove",
                     "description": "Remove a reward from a user.",
-                    "type": "SUB_COMMAND",
+                    "type": ApplicationCommandOptionType.Subcommand,
                     "options": [
                         {
                             "name": "member",
                             "description": "The member to remove the reward from.",
-                            "type": "USER",
+                            "type": ApplicationCommandOptionType.User,
                             "required": true
                         },
                         {
                             "name": "reward",
                             "description": "The reward to remove from the member.",
-                            "type": "STRING",
+                            "type": ApplicationCommandOptionType.String,
                             "autocomplete": true,
                             "required": true
                         }
@@ -86,30 +87,30 @@ export const data = {
                 {
                     "name": "create",
                     "description": "Create a new reward.",
-                    "type": "SUB_COMMAND"
+                    "type": ApplicationCommandOptionType.Subcommand
                 }
             ]
         },
         {
             "name": "features",
             "description": "Manage a users features.",
-            "type": "SUB_COMMAND_GROUP",
+            "type": ApplicationCommandOptionType.SubcommandGroup,
             "options": [
                 {
                     "name": "add",
                     "description": "Add a feature to a user.",
-                    "type": "SUB_COMMAND",
+                    "type": ApplicationCommandOptionType.Subcommand,
                     "options": [
                         {
                             "name": "member",
                             "description": "The member to give the feature to.",
-                            "type": "USER",
+                            "type": ApplicationCommandOptionType.User,
                             "required": true
                         },
                         {
                             "name": "feature",
                             "description": "The feature to give the member.",
-                            "type": "STRING",
+                            "type": ApplicationCommandOptionType.String,
                             "autocomplete": true,
                             "required": true
                         }
@@ -118,18 +119,18 @@ export const data = {
                 {
                     "name": "remove",
                     "description": "Remove a feature from a user.",
-                    "type": "SUB_COMMAND",
+                    "type": ApplicationCommandOptionType.Subcommand,
                     "options": [
                         {
                             "name": "member",
                             "description": "The member to remove the feature from.",
-                            "type": "USER",
+                            "type": ApplicationCommandOptionType.User,
                             "required": true
                         },
                         {
                             "name": "feature",
                             "description": "The feature to remove from the member.",
-                            "type": "STRING",
+                            "type": ApplicationCommandOptionType.String,
                             "autocomplete": true,
                             "required": true
                         }
@@ -140,12 +141,12 @@ export const data = {
         {
             "name": "modmail",
             "description": "This command is used to change the mod-mail channel.",
-            "type": "SUB_COMMAND",
+            "type": ApplicationCommandOptionType.Subcommand,
             "options": [
                 {
                     "name": "channel",
                     "description": "The channel to use the mod-mail feature in.",
-                    "type": "CHANNEL",
+                    "type": ApplicationCommandOptionType.Channel,
                     "channelTypes": ["GUILD_TEXT", "GUILD_NEWS"],
                     "required": true
                 }
@@ -154,53 +155,53 @@ export const data = {
         {
             "name": "messages",
             "description": "Manage messages.",
-            "type": "SUB_COMMAND_GROUP",
+            "type": ApplicationCommandOptionType.SubcommandGroup,
             "options": [
                 {
                     "name": "send",
                     "description": "Used to send a message to a channel or user.",
-                    "type": "SUB_COMMAND",
+                    "type": ApplicationCommandOptionType.Subcommand,
                     "options": [
                         {
                             "name": "id",
                             "description": "The channel/user ID to send a message to.",
-                            "type": "STRING",
+                            "type": ApplicationCommandOptionType.String,
                             "required": true
                         },
                         {
                             "name": "content",
                             "description": "The content to use for the message.",
-                            "type": "STRING",
+                            "type": ApplicationCommandOptionType.String,
                             "required": true
                         },
                         {
                             "name": "reply",
                             "description": "A message ID representing a message to reply to.",
-                            "type": "STRING",
+                            "type": ApplicationCommandOptionType.String,
                             "required": false
                         },
                         {
                             "name": "tts",
                             "description": "Whether or not the message should use TTS.",
-                            "type": "BOOLEAN",
+                            "type": ApplicationCommandOptionType.Boolean,
                             "required": false
                         },
                         {
                             "name": "button",
                             "description": "JSON object containing a single button if needed.",
-                            "type": "STRING",
+                            "type": ApplicationCommandOptionType.String,
                             "required": false
                         },
                         {
                             "name": "links",
                             "description": "Up to 5 links can be included as buttons. Format: 'title,url;title2,url2'.",
-                            "type": "STRING",
+                            "type": ApplicationCommandOptionType.String,
                             "required": false
                         },
                         {
                             "name": "hide-response",
                             "description": "Whether or not to hide the response.",
-                            "type": "BOOLEAN",
+                            "type": ApplicationCommandOptionType.Boolean,
                             "required": false
                         }
                     ]
@@ -208,25 +209,25 @@ export const data = {
                 {
                     "name": "edit",
                     "description": "Used to edit any previously sent message.",
-                    "type": "SUB_COMMAND",
+                    "type": ApplicationCommandOptionType.Subcommand,
                     "options": [
                         {
                             "name": "channel",
                             "description": "The channel where the message is stored.",
-                            "type": "CHANNEL",
+                            "type": ApplicationCommandOptionType.Channel,
                             "channelTypes": ["GUILD_TEXT", "GUILD_NEWS"],
                             "required": true
                         },
                         {
                             "name": "message-id",
                             "description": "The message ID of the message to edit.",
-                            "type": "STRING",
+                            "type": ApplicationCommandOptionType.String,
                             "required": true
                         },
                         {
                             "name": "content",
                             "description": "The content to use for the edited message.",
-                            "type": "STRING",
+                            "type": ApplicationCommandOptionType.String,
                             "required": true
                         }
                     ]
@@ -236,35 +237,35 @@ export const data = {
         {
             "name": "logs",
             "description": "Manage messages.",
-            "type": "SUB_COMMAND_GROUP",
+            "type": ApplicationCommandOptionType.SubcommandGroup,
             "options": [
                 {
                     "name": "usage",
                     "description": "View & filter the usage logs.",
-                    "type": "SUB_COMMAND",
+                    "type": ApplicationCommandOptionType.Subcommand,
                     "options": [
                         {
                             "name": "guild-id",
                             "description": "Guild ID to filter for.",
-                            "type": "STRING",
+                            "type": ApplicationCommandOptionType.String,
                             "required": false
                         },
                         {
                             "name": "channel-id",
                             "description": "Channel ID to filter for.",
-                            "type": "STRING",
+                            "type": ApplicationCommandOptionType.String,
                             "required": false
                         },
                         {
                             "name": "user-id",
                             "description": "User ID to filter for.",
-                            "type": "STRING",
+                            "type": ApplicationCommandOptionType.String,
                             "required": false
                         },
                         {
                             "name": "action-name",
                             "description": "Action (or command) name to filter for.",
-                            "type": "STRING",
+                            "type": ApplicationCommandOptionType.String,
                             "required": false
                         }
                     ]
@@ -272,18 +273,18 @@ export const data = {
                 {
                     "name": "status",
                     "description": "View & filter the status logs.",
-                    "type": "SUB_COMMAND",
+                    "type": ApplicationCommandOptionType.Subcommand,
                     "options": [
                         {
                             "name": "timestamp",
                             "description": "Timestamp to filter for.",
-                            "type": "STRING",
+                            "type": ApplicationCommandOptionType.String,
                             "required": false
                         },
                         {
                             "name": "type",
                             "description": "Status type to filter for.",
-                            "type": "STRING",
+                            "type": ApplicationCommandOptionType.String,
                             "required": false
                         }
                     ]
@@ -293,12 +294,12 @@ export const data = {
         {
             "name": "block",
             "description": "Block or unblock a user from using the bot.",
-            "type": "SUB_COMMAND",
+            "type": ApplicationCommandOptionType.Subcommand,
             "options": [
                 {
                     "name": "member",
                     "description": "The member to block from using the bot.",
-                    "type": "USER",
+                    "type": ApplicationCommandOptionType.User,
                     "required": true
                 }
             ]

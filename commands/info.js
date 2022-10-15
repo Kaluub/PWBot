@@ -1,5 +1,5 @@
 import { readJSON } from "../json.js";
-import { MessageEmbed, MessageAttachment } from "discord.js";
+import { EmbedBuilder, AttachmentBuilder, ApplicationCommandOptionType } from "discord.js";
 import Locale from "../classes/locale.js";
 import { UserData } from "../classes/data.js";
 
@@ -12,7 +12,7 @@ export const data = {
         {
             "name": "reward",
             "description": "The reward name to view the info for.",
-            "type": "STRING",
+            "type": ApplicationCommandOptionType.String,
             "autocomplete": true,
             "required": true
         }
@@ -28,7 +28,7 @@ export const data = {
         query[`unlocked.${item.type}`] = item.id;
         const count = await UserData.searchCount(query);
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setColor('#662211')
             .setTitle(Locale.text(userdata.settings.locale, "INFO_TITLE", item.name))
             .setDescription(Locale.text(userdata.settings.locale, "INFO_DESC", item.name, item.desc ? item.desc : Locale.text(userdata.settings.locale, "INFO_NO_DESC"), item.price, count))
@@ -36,7 +36,7 @@ export const data = {
         let message = {embeds: [embed]};
 
         if(item.img) {
-            const attachment = new MessageAttachment(`./img/${item.type}/${item.img}`);
+            const attachment = new AttachmentBuilder(`./img/${item.type}/${item.img}`);
             embed.setImage(`attachment://${item.img}`);
             message["files"] = [attachment];
         };

@@ -1,5 +1,6 @@
 import { UserData } from "../classes/data.js";
 import Locale from "../classes/locale.js";
+import { ApplicationCommandOptionType } from "discord.js";
 
 export const data = {
     name: 'pay',
@@ -10,13 +11,13 @@ export const data = {
         {
             "name": "member",
             "description": "The member to give your points to.",
-            "type": "USER",
+            "type": ApplicationCommandOptionType.User,
             "required": true
         },
         {
             "name": "points",
             "description": "The amount of points to give this member.",
-            "type": "INTEGER",
+            "type": ApplicationCommandOptionType.Integer,
             "required": true
         }
     ],

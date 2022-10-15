@@ -1,11 +1,13 @@
-import { MessageEmbed } from "discord.js";
-import { AppealData, AppealStatus } from "../classes/data.js";
+import { EmbedBuilder, ApplicationCommandOptionType } from "discord.js";
+import { AppealData } from "../classes/data.js";
 
 const AppealStatusValue = [
     "OPEN",
     "UNDER REVIEW",
     "CLOSED"
-]
+];
+
+const maxCount = 15;
 
 export const data = {
     name: "appeals",
@@ -16,13 +18,13 @@ export const data = {
     options: [{
         "name": "id",
         "description": "Filter by the user ID of whoever created the appeal",
-        "type": "STRING",
+        "type": ApplicationCommandOptionType.String,
         "required": false
     },
     {
         "name": "status",
         "description": "Filter by the status of the appeal",
-        "type": "INTEGER",
+        "type": ApplicationCommandOptionType.Integer,
         "required": false,
         "choices": [
             {
@@ -41,20 +43,25 @@ export const data = {
     }],
     execute: async ({ interaction }) => {
         const appeals = await AppealData.filter(
-            interaction.options?.getInteger("status", false) ?? AppealStatus.OPEN,
-            interaction.options?.getString("authorId", false) ?? undefined
-        )
-        appeals.limit(15);
+            interaction.options?.getString("id", false) ?? undefined,
+            interaction.options?.getInteger("status", false) ?? undefined
+        );
+        const count = await appeals.count();
+        appeals.limit(maxCount);
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setColor('#882244')
             .setTitle('Appeals:')
-            .setDescription("Here's some appeals matching that criteria:\n")
+            .setDescription(`Here's ${count > maxCount ? `${maxCount}/${count}` : count} appeals matching that criteria:\n`)
             .setTimestamp();
 
+        let appealsAdded = 0
         await appeals.forEach(function(appeal) {
-            embed.setDescription(embed.description + `\n[${AppealStatusValue[appeal.status]}] Created by ${appeal.authorId}: ${appeal.messages[0]?.url ?? "URL unavailable"} (<t:${Math.floor(appeal.createdAt / 1000)}>, <t:${Math.floor(appeal.createdAt / 1000)}:R>)`);
+            appealsAdded++;
+            embed.setDescription(embed.data.description + `\n[${AppealStatusValue[appeal.status]}] Created by ${appeal.authorId}: ${appeal.messages[0]?.url ?? "URL unavailable"} (<t:${Math.floor(appeal.createdAt / 1000)}>, <t:${Math.floor(appeal.createdAt / 1000)}:R>)`);
         });
+
+        if (!appealsAdded) embed.setDescription("No appeals matching that criteria.");
 
         return {embeds:[embed]};
     }

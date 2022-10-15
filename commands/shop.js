@@ -1,10 +1,10 @@
 import { readJSON } from "../json.js";
-import { MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu } from "discord.js";
+import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, SelectMenuBuilder, ApplicationCommandOptionType } from "discord.js";
 import { UserData } from "../classes/data.js";
 import Locale from "../classes/locale.js";
 
 function BaseEmbed(type, num, locale, points) {
-    return new MessageEmbed()
+    return new EmbedBuilder()
         .setTitle(`${Locale.text(locale, "SHOP_TITLE")} (${type} #${num})`)
         .setDescription(Locale.text(locale, "SHOP_DESC", points))
         .setColor('#33AA33')
@@ -12,7 +12,7 @@ function BaseEmbed(type, num, locale, points) {
 };
 
 function BaseSelect(locale) {
-    return new MessageSelectMenu()
+    return new SelectMenuBuilder()
         .setCustomId('purchase')
         .setPlaceholder(Locale.text(locale, "SHOP_PURCHASE_SELECT"));
 };
@@ -39,7 +39,7 @@ export const data = {
         {
             "name": "filter",
             "description": "The text filter to apply to the shop.",
-            "type": "STRING",
+            "type": ApplicationCommandOptionType.String,
             "required": false
         }
     ],
@@ -47,39 +47,39 @@ export const data = {
         const member = interaction.member;
         let rewards = await readJSON('json/rewards.json');
 
-        const menuRow = new MessageActionRow().addComponents(
-            new MessageButton()
+        const menuRow = new ActionRowBuilder().addComponents(
+            new ButtonBuilder()
                 .setCustomId('backgrounds')
                 .setLabel(Locale.text(userdata.settings.locale, "BUTTON_BACKGROUNDS"))
                 .setStyle('PRIMARY'),
-            new MessageButton()
+            new ButtonBuilder()
                 .setCustomId('frames')
                 .setLabel(Locale.text(userdata.settings.locale, "BUTTON_FRAMES"))
                 .setStyle('PRIMARY'),
-            new MessageButton()
+            new ButtonBuilder()
                 .setCustomId('roles')
                 .setLabel(Locale.text(userdata.settings.locale, "BUTTON_ROLES"))
                 .setStyle('PRIMARY')
         );
 
-        const categoryRow = new MessageActionRow().addComponents(
-            new MessageButton()
+        const categoryRow = new ActionRowBuilder().addComponents(
+            new ButtonBuilder()
                 .setCustomId('back')
                 .setLabel(Locale.text(userdata.settings.locale, "BUTTON_BACK"))
                 .setStyle('SECONDARY'),
-            new MessageButton()
+            new ButtonBuilder()
                 .setCustomId('previous')
                 .setLabel(Locale.text(userdata.settings.locale, "BUTTON_PREVIOUS"))
                 .setStyle('PRIMARY'),
-            new MessageButton()
+            new ButtonBuilder()
                 .setCustomId('next')
                 .setLabel(Locale.text(userdata.settings.locale, "BUTTON_NEXT"))
                 .setStyle('PRIMARY')
         );
 
-        const purchaseRow = new MessageActionRow();
+        const purchaseRow = new ActionRowBuilder();
 
-        const menuEmbed = new MessageEmbed()
+        const menuEmbed = new EmbedBuilder()
             .setColor('#33AA33')
             .setTitle(`${Locale.text(userdata.settings.locale, "SHOP_TITLE")} (${member.user.tag}):`)
             .setDescription(Locale.text(userdata.settings.locale, "SHOP_DESC", userdata.points))
@@ -121,7 +121,7 @@ export const data = {
             
             shop[reward.type].count += 1;
             shop[reward.type].embeds[shop[reward.type].embeds.length - 1]
-                .setDescription(shop[reward.type].embeds[shop[reward.type].embeds.length - 1].description + `\n• ${reward.name} (${reward.price} points)`)
+                .setDescription(shop[reward.type].embeds[shop[reward.type].embeds.length - 1].data.description + `\n• ${reward.name} (${reward.price} points)`)
             shop[reward.type].selects[shop[reward.type].selects.length - 1]
                 .addOptions([{label: reward.name, value: reward.id}]);
         };
@@ -167,7 +167,7 @@ export const data = {
             };
         });
         collector.on('end', async () => {
-            if(msg.editable) await msg.edit({embeds: [new MessageEmbed().setDescription(Locale.text(userdata.settings.locale, "EXPIRED"))], components: []});
+            if(msg.editable) await msg.edit({embeds: [new EmbedBuilder().setDescription(Locale.text(userdata.settings.locale, "EXPIRED"))], components: []});
         });
     }
 };

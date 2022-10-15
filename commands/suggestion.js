@@ -1,4 +1,4 @@
-import { MessageEmbed, MessageActionRow, MessageButton } from "discord.js";
+import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ApplicationCommandOptionType } from "discord.js";
 import { updateSuggestion } from "../functions.js";
 import { GuildData } from "../classes/data.js";
 import Locale from "../classes/locale.js";
@@ -12,18 +12,18 @@ export const data = {
         {
             "name": "create",
             "description": "Create a suggestion.",
-            "type": "SUB_COMMAND",
+            "type": ApplicationCommandOptionType.Subcommand,
             "options": [
                 {
                     "name": "suggestion",
                     "description": "The suggestion itself. 20 character minimum.",
-                    "type": "STRING",
+                    "type": ApplicationCommandOptionType.String,
                     "required": true
                 },
                 {
                     "name": "category",
                     "description": "The category of your suggestion.",
-                    "type": "STRING",
+                    "type": ApplicationCommandOptionType.String,
                     "choices": [
                         {
                             "name": "Server",
@@ -39,19 +39,19 @@ export const data = {
                 {
                     "name": "title",
                     "description": "The title of the suggestion, optional. 4 character minimum.",
-                    "type": "STRING",
+                    "type": ApplicationCommandOptionType.String,
                     "required": false
                 },
                 {
                     "name": "example",
                     "description": "An example of the suggestion, optional. 20 character minimum.",
-                    "type": "STRING",
+                    "type": ApplicationCommandOptionType.String,
                     "required": false
                 },
                 {
                     "name": "image",
                     "description": "An image demonstrating the suggestion, optional.",
-                    "type": "STRING",
+                    "type": ApplicationCommandOptionType.String,
                     "required": false
                 }
             ]
@@ -59,12 +59,12 @@ export const data = {
         {
             "name": "remove",
             "description": "Remove a previous suggestion.",
-            "type": "SUB_COMMAND",
+            "type": ApplicationCommandOptionType.Subcommand,
             "options": [
                 {
                     "name": "message-id",
                     "description": "The message ID of your suggestion to remove.",
-                    "type": "STRING",
+                    "type": ApplicationCommandOptionType.String,
                     "required": true
                 }
             ]
@@ -72,18 +72,18 @@ export const data = {
         {
             "name": "note",
             "description": "Add a note to your suggestion.",
-            "type": "SUB_COMMAND",
+            "type": ApplicationCommandOptionType.Subcommand,
             "options": [
                 {
                     "name": "message-id",
                     "description": "The message ID of your suggestion to add a note to.",
-                    "type": "STRING",
+                    "type": ApplicationCommandOptionType.String,
                     "required": true
                 },
                 {
                     "name": "note",
                     "description": "The note itself. 10 character minimum.",
-                    "type": "STRING",
+                    "type": ApplicationCommandOptionType.String,
                     "required": true
                 }
             ]
@@ -91,18 +91,18 @@ export const data = {
         {
             "name": "staffnote",
             "description": "Add a staff note to a suggestion.",
-            "type": "SUB_COMMAND",
+            "type": ApplicationCommandOptionType.Subcommand,
             "options": [
                 {
                     "name": "message-id",
                     "description": "The message ID of the suggestion to add a note to.",
-                    "type": "STRING",
+                    "type": ApplicationCommandOptionType.String,
                     "required": true
                 },
                 {
                     "name": "note",
                     "description": "The note itself. 10 character minimum.",
-                    "type": "STRING",
+                    "type": ApplicationCommandOptionType.String,
                     "required": true
                 }
             ]
@@ -125,7 +125,7 @@ export const data = {
             const image = interaction.options.getString('image', false);
             if(image && !image.match(/\.(jpeg|jpg|gif|png)$/)) return {content: Locale.text(userdata.settings.locale, "SUGGESTION_IMAGE_FORMAT"), ephemeral: true};
 
-            const embed = new MessageEmbed() // Suggestions will always be in English!
+            const embed = new EmbedBuilder() // Suggestions will always be in English!
                 .setTitle(title ? `Suggestion: ${title}` : `Suggestion:`)
                 .setDescription(`**Category:** ${category}\n\n**Description:**\n${suggestion}${example ? `\n\n**Example:**\n${example}` : ``}`)
                 .setAuthor({name: interaction.user.tag, iconURL: interaction.user.avatarURL()})
@@ -133,12 +133,12 @@ export const data = {
                 .setTimestamp();
             if(image) embed.setImage(image);
             
-            const row = new MessageActionRow().addComponents(
-                new MessageButton()
+            const row = new ActionRowBuilder().addComponents(
+                new ButtonBuilder()
                     .setCustomId('suggestion-negative')
                     .setStyle('DANGER')
                     .setLabel('Boo!'),
-                new MessageButton()
+                new ButtonBuilder()
                     .setCustomId('suggestion-positive')
                     .setStyle('SUCCESS')
                     .setLabel('Great!')

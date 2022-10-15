@@ -33,7 +33,7 @@ client.on('ready', async () => {
 
     for(const event of commands.events) {
         if(event.inactive) continue;
-        cron.schedule(event.cronTime, async () => await event.execute({channel: client.channels.cache.get(event.channel)}), {timezone: "UTC"})
+        cron.schedule(event.cronTime, async () => await event.execute({channel: client.channels.cache.get(event?.channel), client}), {timezone: "UTC"})
     };
 });
 
@@ -64,6 +64,7 @@ client.on('interactionCreate', async (interaction) => {
         };
     } else if(interaction.isContextMenu()) {
         let userdata = await UserData.get(interaction.user.id);
+        if(userdata.blocked) return await interaction.reply({content: Locale.text(interaction.locale, "BLOCKED"), ephemeral: true});
         if(UserData.isLocked(interaction.user.id) && !client.config.admins.includes(interaction.user.id)) return interaction.reply({content: 'Unable to use this command: Your data is locked, are you in a trade?', ephemeral: true});
         const command = commands.contexts.get(interaction.commandName) || commands.contexts.find(cmd => cmd.aliases && cmd.aliases.includes(interaction.commandName));
         if(!command) return interaction.reply(Locale.text(userdata.settings.locale, "COMMAND_NOT_FOUND"));
@@ -104,6 +105,7 @@ client.on('interactionCreate', async (interaction) => {
         const modal = commands.modals.get(modalName);
         if(!modal) return await interaction.reply({content: Locale.text(interaction.locale, "COMMAND_NOT_FOUND"), ephemeral: true});
         const userdata = await UserData.get(interaction.user.id);
+        if (userdata.blocked) return await interaction.reply({content: Locale.text(interaction.locale, "BLOCKED"), ephemeral: true});
         try {
             const res = await modal.execute({interaction, userdata, args});
             if(res) await interaction.reply(res);
@@ -118,6 +120,7 @@ client.on('interactionCreate', async (interaction) => {
         const button = commands.buttons.get(buttonName);
         if(!button) return await interaction.reply({content: Locale.text(interaction.locale, "COMMAND_NOT_FOUND"), ephemeral: true});
         const userdata = await UserData.get(interaction.user.id);
+        if (userdata.blocked) return await interaction.reply({content: Locale.text(interaction.locale, "BLOCKED"), ephemeral: true});
         try {
             const res = await button.execute({interaction, userdata, args});
             if(res) await interaction.reply(res);

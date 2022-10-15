@@ -1,5 +1,5 @@
-import { readJSON } from "../json.js";
 import Locale from "../classes/locale.js";
+import { ApplicationCommandOptionType } from "discord.js";
 
 export const data = {
     name: 'toggle',
@@ -9,7 +9,7 @@ export const data = {
         {
             "name": "role",
             "description": "Choose which role to toggle.",
-            "type": "STRING",
+            "type": ApplicationCommandOptionType.String,
             "required": true,
             "choices": [
                 {

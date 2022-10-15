@@ -1,4 +1,4 @@
-import { MessageEmbed } from "discord.js";
+import { EmbedBuilder } from "discord.js";
 import UsageLogger from "../../classes/usageLogger.js";
 
 export const data = {
@@ -15,7 +15,7 @@ export const data = {
 
         const shortenedLogs = filteredLogs.slice(-15);
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setColor('#4499DD')
             .setTitle('Logs:')
             .setDescription(`Last ${shortenedLogs.length} ${shortenedLogs.length > 1 ? 'entries' : 'entry'} out of ${filteredLogs.length.toLocaleString()} with your current filter:`)
@@ -23,7 +23,7 @@ export const data = {
 
         for(const log of shortenedLogs) {
             const user = interaction.client.users.cache.get(log.userId);
-            embed.setDescription(embed.description + `\n\n${user ? user.tag : log.userId} used \`${log.actionName}\` at <t:${Math.floor(log.timestamp / 1000)}> (<t:${Math.floor(log.timestamp / 1000)}:R>) in <#${log.channelId}>.`);
+            embed.setDescription(embed.data.description + `\n\n${user ? user.tag : log.userId} used \`${log.actionName}\` at <t:${Math.floor(log.timestamp / 1000)}> (<t:${Math.floor(log.timestamp / 1000)}:R>) in <#${log.channelId}>.`);
         };
 
         return {embeds:[embed]};

@@ -1,4 +1,4 @@
-import { MessageActionRow, MessageButton } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder } from "discord.js";
 
 export const data = {
     name: 'messages/send',
@@ -14,10 +14,10 @@ export const data = {
         const tts = interaction.options.getBoolean('tts', false) ?? undefined;
         const linkData = interaction.options.getString('links', false);
         const button = interaction.options.getString('button', false);
-        const row = new MessageActionRow();
+        const row = new ActionRowBuilder();
         if(button) {
             const bData = JSON.parse(button);
-            row.addComponents(new MessageButton(bData));
+            row.addComponents(new ButtonBuilder(bData));
         };
         if(linkData) {
             const links = linkData.split(';');
@@ -26,7 +26,7 @@ export const data = {
                 const data = i.split(',');
                 if (data.length !== 2) return {content: "Syntax error: Please use the 'title,url;title2,url2' format.", ephemeral};
                 row.addComponents(
-                    new MessageButton()
+                    new ButtonBuilder()
                         .setStyle("LINK")
                         .setLabel(data[0])
                         .setURL(data[1])

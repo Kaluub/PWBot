@@ -1,4 +1,4 @@
-import { MessageEmbed } from "discord.js";
+import { EmbedBuilder } from "discord.js";
 import Locale from "../classes/locale.js";
 
 export const data = {
@@ -8,7 +8,7 @@ export const data = {
     usage: '/stats',
     execute: async ({interaction, userdata}) => {
         const client = interaction.client;
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setTitle(Locale.text(userdata.settings.locale, "STATISTICS"))
             .setColor('#662211')
             .setTimestamp()

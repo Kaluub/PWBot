@@ -1,5 +1,6 @@
-import { MessageEmbed, MessageActionRow } from "discord.js";
+import { EmbedBuilder, ActionRowBuilder } from "discord.js";
 import { createCanvas, loadImage } from "canvas";
+import { AppealMessageType, AppealStatus } from "./classes/data.js";
 import { readJSON } from "./json.js";
 
 // Creates the profile card:
@@ -88,6 +89,29 @@ async function createProfileCard(member, rewards, userdata) {
     return canvas.toBuffer();
 };
 
+// Create the appeal embed:
+const APPEAL_MAX_FIELDS = 8
+function createAppealEmbed(appeal) {
+    const embed = new EmbedBuilder()
+        .setTitle(`Appeal:`)
+        .setDescription(`Created <t:${Math.floor(appeal.createdAt / 1000)}:R>`)
+        .setColor(appeal.status == AppealStatus.OPEN ? "#00FF00" : appeal.status == AppealStatus.IN_PROGRESS ? "#FFFF00" : "#FF0000")
+        .setTimestamp()
+    
+    for (const message of appeal.messages) {
+        let header = `Message from <@${message.authorId}>`;
+        if (message.type == AppealMessageType.REPLY) header = `Reply from <@${message.authorId}>`;
+        if (message.type == AppealMessageType.STATUS) header = `Status changed by <@${message.authorId}>`;
+        embed.addFields({name: `${header} (<t:${Math.floor(message.timestamp / 1000)}:R>):`, value: `${message.content}`})
+        if (embed.fields.length >= APPEAL_MAX_FIELDS) {
+            embed.addFields({name: "Appeal is long!", value: `Due to the length of this appeal, ${appeal.messages.length - APPEAL_MAX_FIELDS} messages may not be visible.`})
+            break;
+        };
+    };
+
+    return embed;
+};
+
 // Updates a suggestion embed (used multiple times, so a function helped)
 async function updateSuggestion(data, message) {
     const net = data.positive - data.negative;
@@ -108,9 +132,9 @@ async function updateSuggestion(data, message) {
     };
     if(data.staffnote?.length) fields.push({name: `❗ Staff note: <t:${data.staffnoteTime}> ❗`, value: data.staffnote});
     await message.edit({components: [
-        new MessageActionRow(message.components[0])
+        new ActionRowBuilder(message.components[0])
     ], embeds: [
-        new MessageEmbed(message.embeds[0])
+        new EmbedBuilder(message.embeds[0])
             .setFields(fields)
             .setColor(color)
     ]});
@@ -126,4 +150,4 @@ function getDateString() {
     return `${now.getUTCDate()}/${now.getUTCMonth() + 1}/${now.getUTCFullYear()}`;
 }
 
-export { updateSuggestion, randInt, getDateString, createProfileCard };
+export { createAppealEmbed, updateSuggestion, randInt, getDateString, createProfileCard };
