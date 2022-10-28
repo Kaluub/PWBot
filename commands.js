@@ -5,8 +5,8 @@ function dirToCollection(path) {
     const col = new Collection();
     const files = readdirSync(path).filter(file => file.endsWith('.js'));
     files.forEach(async file => {
-        const { data } = await import(`./${path}/${file}`);
-        if(!data.archived) col.set(data.name, data);
+        const { data } = await import(`${path}/${file}`);
+        if(!data.archived && !data.disabled) col.set(data.name, data);
     });
     return col;
 };

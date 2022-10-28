@@ -15,7 +15,7 @@ export const data = {
         };
         appeal.addMessage(content, interaction.user.id, null, AppealMessageType.REPLY);
         await AppealData.set(message.id, appeal);
-        await message.edit({embeds: [createAppealEmbed(appeal)]});
+        await message.edit({embeds: [createAppealEmbed(appeal, interaction.client)]});
         await interaction.update({components: []});
         await interaction.followUp({content: "Your reply has been sent to the staff team.", ephemeral: true});
     }

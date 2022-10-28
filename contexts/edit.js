@@ -1,5 +1,5 @@
 import Locale from "../classes/locale.js";
-import { ModalBuilder, TextInputBuilder, ActionRowBuilder, ApplicationCommandType } from "discord.js";
+import { ModalBuilder, TextInputBuilder, ActionRowBuilder, ApplicationCommandType, TextInputStyle } from "discord.js";
 
 export const data = {
     name: 'Edit message',
@@ -17,7 +17,7 @@ export const data = {
             .setPlaceholder(Locale.text(userdata.settings.locale, "EDIT_MODAL_PLACEHOLDER_1"))
             .setValue(interaction.targetMessage.content)
             .setMaxLength(2000)
-            .setStyle("PARAGRAPH")
+            .setStyle(TextInputStyle.Paragraph)
 
         editModal.addComponents(
             new ActionRowBuilder().addComponents(contentInput)

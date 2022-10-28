@@ -9,6 +9,7 @@ export const data = {
     aliases: ['p'],
     desc: 'This is a command for displaying your profile card.',
     usage: '/profile',
+    disabled: true,
     options: [
         {
             "name": "member",

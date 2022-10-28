@@ -5,6 +5,7 @@ export const data = {
     name: 'toggle',
     desc: `A command for toggling some specific roles, used for pings.`,
     usage: '/toggle [todo]',
+    disabled: true,
     options: [
         {
             "name": "role",

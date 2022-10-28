@@ -9,6 +9,7 @@ export const data = {
     aliases: ['s', 'custom', 'c'],
     desc: 'This is a command for customizing your profile card.',
     usage: '/set',
+    disabled: true,
     execute: async ({interaction}) => {
         await interaction.deferReply();
         const guild = interaction.guild;

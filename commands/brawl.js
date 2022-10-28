@@ -139,6 +139,7 @@ export const data = {
     desc: 'Brawl with other members!',
     usage: '/brawl [stats/@member(s))]',
     admin: false,
+    disabled: true,
     options: [
         {
             "name": "member",

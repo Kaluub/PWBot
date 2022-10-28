@@ -1,4 +1,4 @@
-import { ModalBuilder, TextInputBuilder, ActionRowBuilder } from "discord.js";
+import { ModalBuilder, TextInputBuilder, ActionRowBuilder, TextInputStyle } from "discord.js";
 
 export const data = {
     name: "appealdmreply",
@@ -11,7 +11,7 @@ export const data = {
             .setCustomId(`content`)
             .setLabel("Content:")
             .setPlaceholder("Type your reply to the staff team here.")
-            .setStyle("PARAGRAPH")
+            .setStyle(TextInputStyle.Paragraph)
             .setMaxLength(200)
             .setRequired(true)
         

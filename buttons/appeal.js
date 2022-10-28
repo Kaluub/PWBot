@@ -1,4 +1,4 @@
-import { ModalBuilder, TextInputBuilder, ActionRowBuilder } from "discord.js";
+import { ModalBuilder, TextInputBuilder, ActionRowBuilder, TextInputStyle } from "discord.js";
 import Locale from "../classes/locale.js";
 
 export const data = {
@@ -14,7 +14,7 @@ export const data = {
             .setPlaceholder(Locale.text(userdata.settings.locale, "MODMAIL_MODAL_PLACEHOLDER_2"))
             .setMinLength(50)
             .setMaxLength(800)
-            .setStyle("PARAGRAPH")
+            .setStyle(TextInputStyle.Paragraph)
             .setRequired(true)
         
         modal.addComponents(

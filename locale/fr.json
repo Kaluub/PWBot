@@ -250,5 +250,12 @@
     "CLANBATTLE_ADD_QUESTION_MODAL_PLACEHOLDER_3": "Le nombre de la ligne avec l'option correcte.",
     "CLANBATTLE_ADD_QUESTION_RESPONSE_INVALID_ANSWER_NUMBER": "Invalid answer number (should be between 1 and the number of lines in your list).",
     "CLANBATTLE_ADD_QUESTION_RESPONSE_INVALID_OPTIONS_AMOUNT": "Vous avez besoin 2 au 10 options.",
-    "CLANBATTLE_ADD_QUESTION_RESPONSE_SUCCESS": "Nouveau question ajouté: {0}"
+    "CLANBATTLE_ADD_QUESTION_RESPONSE_SUCCESS": "Nouveau question ajouté: {0}",
+    "CREDITS_TITLE": "Crédits:",
+    "CREDITS_MAIN": "Conception: Aldople, Kaluub\nArtiste: Aldople\nProgrammation: Kaluub\nTraductions francais: Exilence",
+    "CREDITS_ENDING": [
+        "Au bientot!",
+        "A demain!"
+    ],
+    "BIRTHDAY": "Bonne fete, {0}!"
 }

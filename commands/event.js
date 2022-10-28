@@ -6,6 +6,7 @@ export const data = {
     desc: 'A command for starting and managing events.',
     usage: '/event [TODO]',
     admin: true,
+    disabled: true,
     options: [
         {
             "name": "create",

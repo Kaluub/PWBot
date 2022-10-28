@@ -8,6 +8,7 @@ export const data = {
     aliases: ['i'],
     desc: `This is a command for viewing the info of a reward.`,
     usage: '/info [reward name]',
+    disabled: true,
     options: [
         {
             "name": "reward",

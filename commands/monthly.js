@@ -6,6 +6,7 @@ export const data = {
     aliases: ['m'],
     desc: `This is a command for earning your monthly rewards.`,
     usage: '/monthly',
+    disabled: true,
     execute: async ({interaction}) => {
         const guild = interaction.guild;
         const member = interaction.member;

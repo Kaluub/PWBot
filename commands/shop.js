@@ -35,6 +35,7 @@ export const data = {
     aliases: ['mart'],
     desc: 'This is a command for displaying the shop.',
     usage: '/shop',
+    disabled: true,
     options: [
         {
             "name": "filter",

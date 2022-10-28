@@ -4,7 +4,7 @@ import { readJSON } from "../json.js";
 
 export default class Client extends DiscordClient {
     constructor(commands) {
-        super({intents: [GatewayIntentBits.Guilds, GatewayIntentBits.DirectMessages, GatewayIntentBits.GuildMembers]});
+        super({intents: [GatewayIntentBits.Guilds, GatewayIntentBits.DirectMessages, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildMessages]});
         this.commands = commands;
         this.config = readJSON("config.json");
         this.json = this.loadJSONData();

@@ -44,7 +44,7 @@ export const data = {
         const appeal = new AppealData({authorId: interaction.user.id})
             .addMessage(content, interaction.user.id, message.url)
         await AppealData.set(message.id, appeal);
-        await message.edit({content: " ", embeds: [createAppealEmbed(appeal)]});
+        await message.edit({content: " ", embeds: [createAppealEmbed(appeal, interaction.client)]});
         return {content: Locale.text(userdata.settings.locale, "MODMAIL_SUCCESS"), ephemeral: true};
     }
 };

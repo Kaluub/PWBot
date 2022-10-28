@@ -6,6 +6,7 @@ export const data = {
     aliases: ['tut'],
     desc: 'This command is used to view the tutorial.',
     usage: '/tutorial',
+    disabled: true,
     execute: async ({interaction, userdata}) => {
         const embeds = [
             new EmbedBuilder()

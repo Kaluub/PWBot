@@ -7,6 +7,7 @@ export const data = {
     aliases: ['give','send'],
     desc: 'This command is used to circulate points between users.',
     usage: '/pay [points] [@user/user name]',
+    disabled: true,
     options: [
         {
             "name": "member",

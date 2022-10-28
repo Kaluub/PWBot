@@ -12,7 +12,7 @@ export const data = {
         userdata.setBlocked(true);
         await UserData.set(appeal.messages[0].authorId, userdata)
         await AppealData.set(interaction.message.id, appeal);
-        await interaction.update({embeds: [createAppealEmbed(appeal)]})
+        await interaction.update({embeds: [createAppealEmbed(appeal, interaction.client)]})
         await interaction.followUp({ephemeral: true, content: "Marked as closed & blocked"});
     }
 };

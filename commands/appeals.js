@@ -2,9 +2,9 @@ import { EmbedBuilder, ApplicationCommandOptionType } from "discord.js";
 import { AppealData } from "../classes/data.js";
 
 const AppealStatusValue = [
-    "OPEN",
-    "UNDER REVIEW",
-    "CLOSED"
+    "🟢 [OPEN]",
+    "🟡 [UNDER REVIEW]",
+    "🔴 [CLOSED]"
 ];
 
 const maxCount = 15;
@@ -58,7 +58,8 @@ export const data = {
         let appealsAdded = 0
         await appeals.forEach(function(appeal) {
             appealsAdded++;
-            embed.setDescription(embed.data.description + `\n[${AppealStatusValue[appeal.status]}] Created by ${appeal.authorId}: ${appeal.messages[0]?.url ?? "URL unavailable"} (<t:${Math.floor(appeal.createdAt / 1000)}>, <t:${Math.floor(appeal.createdAt / 1000)}:R>)`);
+            const user = interaction.client.users.cache.get(appeal.authorId);
+            embed.setDescription(embed.data.description + `\n${AppealStatusValue[appeal.status]} Created by ${user ? user.tag : appeal.authorId}: ${appeal.messages[0]?.url ?? "URL unavailable"} (<t:${Math.floor(appeal.createdAt / 1000)}>, <t:${Math.floor(appeal.createdAt / 1000)}:R>)`);
         });
 
         if (!appealsAdded) embed.setDescription("No appeals matching that criteria.");

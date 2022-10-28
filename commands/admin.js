@@ -1,5 +1,5 @@
 import { readdirSync } from "fs";
-import { ApplicationCommandOptionType } from "discord.js";
+import { ApplicationCommandOptionType, ChannelType } from "discord.js";
 
 const functions = new Map();
 const files = readdirSync("./commands/admin").filter(file => file.endsWith('.js'));
@@ -14,7 +14,7 @@ export const data = {
     usage: '/admin [...]',
     admin: true,
     options: [
-        {
+        /*{
             "name": "points",
             "description": "A command to manage point distribution.",
             "type": ApplicationCommandOptionType.Subcommand,
@@ -151,7 +151,7 @@ export const data = {
                     "required": true
                 }
             ]
-        },
+        },*/
         {
             "name": "messages",
             "description": "Manage messages.",
@@ -215,7 +215,7 @@ export const data = {
                             "name": "channel",
                             "description": "The channel where the message is stored.",
                             "type": ApplicationCommandOptionType.Channel,
-                            "channelTypes": ["GUILD_TEXT", "GUILD_NEWS"],
+                            "channelTypes": [ChannelType.GuildText, ChannelType.GuildAnnouncement, ChannelType.PublicThread, ChannelType.PrivateThread],
                             "required": true
                         },
                         {
@@ -236,7 +236,7 @@ export const data = {
         },
         {
             "name": "logs",
-            "description": "Manage messages.",
+            "description": "View bot logs.",
             "type": ApplicationCommandOptionType.SubcommandGroup,
             "options": [
                 {

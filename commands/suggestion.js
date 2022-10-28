@@ -8,6 +8,7 @@ export const data = {
     aliases: ['suggest'],
     desc: 'Suggestions.',
     usage: '/suggestion [create/remove/note]',
+    disabled: true,
     options: [
         {
             "name": "create",

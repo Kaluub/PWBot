@@ -7,6 +7,7 @@ export const data = {
     aliases: ['st'],
     desc: 'This command is used to set your custom status displayed on your profile card.',
     usage: '/status [reset/text (60 character limit)]',
+    disabled: true,
     options: [
         {
             "name": "text",

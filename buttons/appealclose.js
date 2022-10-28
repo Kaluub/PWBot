@@ -9,7 +9,7 @@ export const data = {
         appeal.status = AppealStatus.CLOSED;
         appeal.addMessage("Marked as closed", interaction.user.id, null, AppealMessageType.STATUS);
         await AppealData.set(interaction.message.id, appeal);
-        await interaction.update({embeds: [createAppealEmbed(appeal)]});
+        await interaction.update({embeds: [createAppealEmbed(appeal, interaction.client)]});
         await interaction.followUp({ephemeral: true, content: "Marked as closed"});
     }
 };

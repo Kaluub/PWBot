@@ -7,6 +7,7 @@ export const data = {
     name:'vanity',
     desc:`Manage your vanity roles.`,
     usage:'/vanity',
+    disabled: true,
     execute: async ({interaction}) => {
         const guild = interaction.guild;
         const member = interaction.member;

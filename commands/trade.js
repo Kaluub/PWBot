@@ -255,6 +255,7 @@ export const data = {
     name: 'trade',
     desc: `Starts a trade with another member.`,
     usage: '/trade [@user]',
+    disabled: true,
     options: [
         {
             name: 'member',

@@ -90,8 +90,8 @@ async function createProfileCard(member, rewards, userdata) {
 };
 
 // Create the appeal embed:
-const APPEAL_MAX_FIELDS = 8
-function createAppealEmbed(appeal) {
+const APPEAL_MAX_FIELDS = 8;
+function createAppealEmbed(appeal, client) {
     const embed = new EmbedBuilder()
         .setTitle(`Appeal:`)
         .setDescription(`Created <t:${Math.floor(appeal.createdAt / 1000)}:R>`)
@@ -99,11 +99,12 @@ function createAppealEmbed(appeal) {
         .setTimestamp()
     
     for (const message of appeal.messages) {
-        let header = `Message from <@${message.authorId}>`;
+        const user = client.users.cache.get(message.authorId);
+        let header = `Message from ${user?.tag ?? message.authorId}`;
         if (message.type == AppealMessageType.REPLY) header = `Reply from <@${message.authorId}>`;
         if (message.type == AppealMessageType.STATUS) header = `Status changed by <@${message.authorId}>`;
         embed.addFields({name: `${header} (<t:${Math.floor(message.timestamp / 1000)}:R>):`, value: `${message.content}`})
-        if (embed.fields.length >= APPEAL_MAX_FIELDS) {
+        if (embed.data.fields.length >= APPEAL_MAX_FIELDS) {
             embed.addFields({name: "Appeal is long!", value: `Due to the length of this appeal, ${appeal.messages.length - APPEAL_MAX_FIELDS} messages may not be visible.`})
             break;
         };

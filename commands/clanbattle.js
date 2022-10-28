@@ -1,4 +1,4 @@
-import { ModalBuilder, TextInputBuilder, ActionRowBuilder, ApplicationCommandOptionType } from "discord.js";
+import { ModalBuilder, TextInputBuilder, ActionRowBuilder, ApplicationCommandOptionType, TextInputStyle, ChannelType } from "discord.js";
 import { GuildData } from "../classes/data.js";
 import Locale from "../classes/locale.js";
 import { data as clanbattle } from "../events/clanbattle.js";
@@ -7,6 +7,7 @@ export const data = {
     name: 'clanbattle',
     desc: 'Command used to manage clan battles.',
     usage: '/clanbattle [test/start/questions]',
+    disabled: true,
     options: [
         {
             "name": "test",
@@ -17,7 +18,7 @@ export const data = {
                     "name": "channel",
                     "description": "The text channel to use.",
                     "type": ApplicationCommandOptionType.Channel,
-                    "channelTypes": ["GUILD_TEXT", "GUILD_NEWS"],
+                    "channelTypes": [ChannelType.GuildText, ChannelType.GuildAnnouncement, ChannelType.PublicThread, ChannelType.PrivateThread],
                     "required": false
                 }
             ]
@@ -31,7 +32,7 @@ export const data = {
                     "name": "channel",
                     "description": "The text channel to use.",
                     "type": ApplicationCommandOptionType.Channel,
-                    "channelTypes": ["GUILD_TEXT", "GUILD_NEWS"],
+                    "channelTypes": [ChannelType.GuildText, ChannelType.GuildAnnouncement, ChannelType.PublicThread, ChannelType.PrivateThread],
                     "required": false
                 }
             ]
@@ -88,14 +89,14 @@ export const data = {
                     .setPlaceholder(Locale.text(userdata.settings.locale, "CLANBATTLE_ADD_QUESTION_MODAL_PLACEHOLDER_1"))
                     .setMaxLength(128)
                     .setMinLength(4)
-                    .setStyle("SHORT")
+                    .setStyle(TextInputStyle.Short)
                     .setRequired(true)
                 
                 const optionsInput = new TextInputBuilder()
                     .setCustomId("question-options")
                     .setLabel(Locale.text(userdata.settings.locale, "CLANBATTLE_ADD_QUESTION_MODAL_LABEL_2"))
                     .setPlaceholder(Locale.text(userdata.settings.locale, "CLANBATTLE_ADD_QUESTION_MODAL_PLACEHOLDER_2"))
-                    .setStyle("PARAGRAPH")
+                    .setStyle(TextInputStyle.Paragraph)
                     .setRequired(true)
                 
                 const answerInput = new TextInputBuilder()
@@ -104,7 +105,7 @@ export const data = {
                     .setPlaceholder(Locale.text(userdata.settings.locale, "CLANBATTLE_ADD_QUESTION_MODAL_PLACEHOLDER_3"))
                     .setMaxLength(1)
                     .setMinLength(1)
-                    .setStyle("SHORT")
+                    .setStyle(TextInputStyle.Short)
                     .setRequired(true)
                 
                 modal.addComponents(

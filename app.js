@@ -25,11 +25,11 @@ client.on('ready', async () => {
     readline.prompt();
     StatusLogger.logStatus({type: "start", detail: "The bot was started"});
 
-    setInterval(() => {
+    /*setInterval(() => {
         client.user.setActivity(statuses[statusNum].name,statuses[statusNum].options);
         statusNum += 1;
         if(statusNum >= statuses.length) statusNum = 0;
-    }, 30000);
+    }, 30000);*/
 
     for(const event of commands.events) {
         if(event.inactive) continue;
@@ -38,7 +38,7 @@ client.on('ready', async () => {
 });
 
 client.on('interactionCreate', async (interaction) => {
-    if(interaction.isCommand()){
+    if(interaction.isChatInputCommand()){
         let userdata = await UserData.get(interaction.user.id);
         if(userdata.settings.autoLocale) userdata.settings.locale = interaction.locale;
         if(userdata.blocked) return interaction.reply(Locale.text(userdata.settings.locale, "BLOCKED"));
@@ -62,7 +62,7 @@ client.on('interactionCreate', async (interaction) => {
             readline.prompt(true);
             StatusLogger.logStatus({type: "command-error", detail: error});
         };
-    } else if(interaction.isContextMenu()) {
+    } else if(interaction.isContextMenuCommand()) {
         let userdata = await UserData.get(interaction.user.id);
         if(userdata.blocked) return await interaction.reply({content: Locale.text(interaction.locale, "BLOCKED"), ephemeral: true});
         if(UserData.isLocked(interaction.user.id) && !client.config.admins.includes(interaction.user.id)) return interaction.reply({content: 'Unable to use this command: Your data is locked, are you in a trade?', ephemeral: true});

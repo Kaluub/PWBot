@@ -8,6 +8,7 @@ export const data = {
     admin: false,
     desc: `This is a command for viewing your owned backgrounds and frames.`,
     usage: '/list',
+    disabled: true,
     execute: async ({interaction, userdata}) => {
         const member = interaction.member;
         let rewards = await readJSON('json/rewards.json');

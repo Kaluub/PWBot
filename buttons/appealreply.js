@@ -1,4 +1,4 @@
-import { ModalBuilder, TextInputBuilder, ActionRowBuilder } from "discord.js";
+import { ModalBuilder, TextInputBuilder, ActionRowBuilder, TextInputStyle } from "discord.js";
 
 export const data = {
     name: "appealreply",
@@ -11,7 +11,7 @@ export const data = {
             .setCustomId(`content`)
             .setLabel("Content:")
             .setPlaceholder("The content of the message to reply with. This will re-open the appeal if it was already closed.")
-            .setStyle("PARAGRAPH")
+            .setStyle(TextInputStyle.Paragraph)
             .setMaxLength(200)
             .setRequired(true)
         

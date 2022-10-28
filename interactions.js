@@ -9,7 +9,10 @@ const contextInteractionFiles = readdirSync('./contexts').filter(file => file.en
 
 for (const file of channelCommandFiles) {
     const { data } = await import(`./commands/${file}`);
-    if(data.hidden || data.archived || data.noInteraction) continue;
+    if(data.hidden) continue;
+    if(data.archived) continue;
+    if(data.disabled) continue;
+    if(data.noInteraction) continue;
     interactions.push({
         name: data.name,
         description: data.desc,
@@ -19,7 +22,10 @@ for (const file of channelCommandFiles) {
 
 for (const file of contextInteractionFiles) {
     const { data } = await import(`./contexts/${file}`);
+    console.log(data)
     if(data.hidden) continue;
+    if(data.archived) continue;
+    if(data.disabled) continue;
     interactions.push({
         type: data.type,
         name: data.name

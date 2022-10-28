@@ -41,7 +41,7 @@ export const data = {
             if (appeal.status == AppealStatus.CLOSED) appeal.status = AppealStatus.OPEN;
             appeal.addMessage(content, interaction.user.id, msg.url, AppealMessageType.REPLY);
             await AppealData.set(message.id, appeal);
-            await interaction.update({embeds: [createAppealEmbed(appeal)]});
+            await interaction.update({embeds: [createAppealEmbed(appeal, interaction.client)]});
             await interaction.followUp({content: Locale.text(userdata.settings.locale, "MODMAIL_SUCCESS"), ephemeral: true});
         } catch {
             if(interaction.replied) return {content: "Reply failed, user likely did not accept replies from the bot or left the server.", ephemeral: true};
