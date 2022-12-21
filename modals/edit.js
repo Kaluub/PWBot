@@ -11,6 +11,6 @@ export const data = {
         if(!content.length) content = " "
         if(!message.editable) return Locale.text("EDIT_NOT_EDITABLE");
         await message.edit({content});
-        return {content: Locale.text(userdata.settings.locale, "EDIT_SUCCESS", message.url)};
+        return {content: Locale.text(userdata.settings.locale, "EDIT_SUCCESS", message.url), ephemeral: true};
     }
 }
