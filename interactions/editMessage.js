@@ -40,25 +40,59 @@ class EditInteraction extends DefaultInteraction {
                                 .setValue(message.content || "")
                                 .setMaxLength(2000)
                                 .setStyle(TextInputStyle.Paragraph)
+                        ),
+                    new ActionRowBuilder()
+                        .addComponents(
+                            new TextInputBuilder()
+                                .setCustomId("buttons")
+                                .setLabel("Buttons:")
+                                .setPlaceholder("Don't use this if you don't know what you are doing. Format: id,label,style/id,label,style")
+                                .setMaxLength(100)
+                                .setStyle(TextInputStyle.Short)
+                                .setRequired(false)
                         )
                 )
             
             return await interaction.showModal(editModal);
         } else if (interaction.isModalSubmit()) {
             let content = interaction.fields.getTextInputValue("content");
+            const buttons = interaction.fields.getTextInputValue("buttons") ?? undefined;
+
             if (!content?.length)
                 content = " ";
 
             const channelId = interaction.customId.split("/")[1];
             const messageId = interaction.customId.split("/")[2];
 
+            let options = { content };
+
+            if (buttons) {
+                const actionRow = new ActionRowBuilder();
+                const buttonArray = buttons.split("/");
+                let i = 0;
+                for (const buttonSegment of buttonArray) {
+                    i += 1;
+                    if (i >= 5)
+                        break;
+                    
+                    const [id, label, style] = buttonSegment.split(",");
+                    actionRow.addComponents(
+                        new ButtonBuilder()
+                            .setCustomId(id)
+                            .setLabel(label)
+                            .setStyle(parseInt(style))
+                    );
+                }
+                options.components = [actionRow];
+            }
+
             try {
                 const channel = await interaction.client.channels.fetch(channelId);
                 const message = await channel.messages.fetch(messageId);
-                message.edit({content});
-                return {ephemeral: true, content: Locale.text(interaction, "EDITED_MESSAGE", [message.url])};
+                message.edit(options);
+                return { ephemeral: true, content: Locale.text(interaction, "EDITED_MESSAGE", [message.url]) };
             } catch {
-                return {ephemeral: true, content: Locale.text(interaction, "EDIT_FAILED")};
+                return { ephemeral: true, content: Locale.text(interaction, "EDIT_FAILED") };
             }
         }
     }
