@@ -1,0 +1,12 @@
+{
+    "COMMAND_ERROR_NOT_FOUND": "Error: Command not found.",
+    "DEFAULT_COMMAND": "Default command.",
+    "NO_PERMISSION": "No permission to do this action.",
+    "DELETED_X_MESSAGES": "Deleted {0} messages.",
+    "FAILED_BULK_DELETE": "Error: Could not delete the messages.",
+    "NOT_TEXT_CHANNEL": "This channel is not a text channel!",
+    "SENT_MESSAGE": "Sent your message. Hyperlink: {0}",
+    "FAILED_SENDING_MESSAGE": "Failed to send a message to the channel.",
+    "EDIT_FAILED": "Could not edit the message.",
+    "EDITED_MESSAGE": "Edited the message. Hyperlink: {0}"
+}
