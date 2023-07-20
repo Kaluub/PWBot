@@ -22,6 +22,8 @@ class CreateAppealInteraction extends DefaultInteraction {
                                 .setCustomId("content")
                                 .setLabel("Appeal message:")
                                 .setPlaceholder("Type in your appeal using the format above.")
+                                .setMinLength(50)
+                                .setMaxLength(1000)
                                 .setStyle(TextInputStyle.Paragraph)
                         )
                 )

@@ -24,6 +24,7 @@ class AppealInteraction extends DefaultInteraction {
                                     .setCustomId("content")
                                     .setLabel("Reply content:")
                                     .setPlaceholder("Type in your reply here.")
+                                    .setMaxLength(250)
                                     .setStyle(TextInputStyle.Paragraph)
                             )
                     )
