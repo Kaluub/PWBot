@@ -11,10 +11,10 @@ class NewMemberHandler {
      * @param {GuildMember} member 
      */
     async handleNewMember(member) {
-        if (!Config.HOME_SERVERS.includes(member.guild.id))
+        const channel = await member.client.channels.fetch(Config.LOG_CHANNEL);
+        if (channel.guild.id !== member.guild.id)
             return;
 
-        const channel = await member.client.channels.fetch(Config.LOG_CHANNEL);
         const createdAt = Math.floor(member.user.createdTimestamp / 1000);
         let emoji = ":inbox_tray:";
         const warnings = [];

@@ -7,10 +7,10 @@ class RemovedMemberHandler {
      * @param {GuildMember} member 
      */
     async handleRemovedMember(member) {
-        if (!Config.HOME_SERVERS.includes(member.guild.id))
-            return;
-
         const channel = await member.client.channels.fetch(Config.LOG_CHANNEL);
+        if (channel.guild.id !== member.guild.id)
+            return;
+        
         const joinedAt = Math.floor(member.joinedTimestamp / 1000);
 
         let content = `:outbox_tray: **${member.user.username}** (ID: ${member.user.id}) left or was removed from the server.\n` +
