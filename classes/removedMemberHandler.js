@@ -12,8 +12,9 @@ class RemovedMemberHandler {
             return;
         
         const joinedAt = Math.floor(member.joinedTimestamp / 1000);
+        const username = member.user.discriminator === "0" ? member.user.username : member.user.tag;
 
-        let content = `:outbox_tray: **${member.user.username}** (ID: ${member.user.id}) left or was removed from the server.\n` +
+        let content = `:outbox_tray: **${username}** (ID: ${member.user.id}) left or was removed from the server.\n` +
             `Joined: <t:${joinedAt}> (<t:${joinedAt}:R>)\n` +
             `Roles: \`${member.roles.cache.sort((roleA, roleB) => roleB.rawPosition - roleA.rawPosition).map(role => role.name).join(", ")}\``;
         

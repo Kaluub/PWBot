@@ -16,6 +16,8 @@ class NewMemberHandler {
             return;
 
         const createdAt = Math.floor(member.user.createdTimestamp / 1000);
+        const username = member.user.discriminator === "0" ? member.user.username : member.user.tag;
+
         let emoji = ":inbox_tray:";
         const warnings = [];
         const notes = [];
@@ -36,7 +38,7 @@ class NewMemberHandler {
             notes.push(`This user has opened ${appealCount} appeal(s) through the appeals system.`);
         }
 
-        let content = `${emoji} **${member.user.username}** (ID: ${member.user.id}) joined the server.\n` +
+        let content = `${emoji} **${username}** (ID: ${member.user.id}) joined the server.\n` +
             `Created: <t:${createdAt}> (<t:${createdAt}:R>)`;
         
         const warningTemplate = `\n:triangular_flag_on_post: Warning: `;
