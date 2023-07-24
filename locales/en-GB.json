@@ -8,5 +8,8 @@
     "SENT_MESSAGE": "Sent your message. Hyperlink: {0}",
     "FAILED_SENDING_MESSAGE": "Failed to send a message to the channel.",
     "EDIT_FAILED": "Could not edit the message.",
-    "EDITED_MESSAGE": "Edited the message. Hyperlink: {0}"
+    "EDITED_MESSAGE": "Edited the message. Hyperlink: {0}",
+    "UNSUPPORTED_FORMAT": "This file format is not supported. Please use a JPEG or PNG image.",
+    "FAILED_FETCH_IMAGE": "Failed to fetch the image.",
+    "FILE_TOO_LARGE": "The file received is too large to process."
 }

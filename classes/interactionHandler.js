@@ -44,11 +44,11 @@ class InteractionHandler {
             return;
         try {
             if (interactionHandler.updateIfComponent && interaction.isMessageComponent())
-                await interaction.deferUpdate({ ephemeral: interactionHandler.ephemeral ? true : false })
+                await interaction.deferUpdate({ ephemeral: interactionHandler.ephemeral })
             else
-                await interaction.deferReply({ ephemeral: interactionHandler.ephemeral ? true : false });
-        } catch {
-            return;
+                await interaction.deferReply({ ephemeral: interactionHandler.ephemeral });
+        } catch (err) {
+            console.error(err);
         }
     }
 
