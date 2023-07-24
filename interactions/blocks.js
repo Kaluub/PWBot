@@ -9,6 +9,7 @@ const maxHeight = 57;
 
 class BlocksInteraction extends DefaultInteraction {
     static name = "blocks";
+    static disabled = true;
     static applicationCommand = new SlashCommandBuilder()
         .setName(BlocksInteraction.name)
         .setDescription("Transform an image into in-game blocks.")
