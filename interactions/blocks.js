@@ -62,7 +62,7 @@ class BlocksInteraction extends DefaultInteraction {
         this.imageCache = new Map();
     }
 
-    static allowedContentTypes = ["image/png", "image/jpeg", "image.webp"];
+    static allowedContentTypes = ["image/png", "image/jpeg", "image/webp"];
 
 
     /**
@@ -127,11 +127,11 @@ class BlocksInteraction extends DefaultInteraction {
 
             // Cache it if not yet done
             if (!blockImage) {
-                blockImage = await sharp("./assets/blocks/" + item.filename).toBuffer();
+                blockImage = sharp("./assets/blocks/" + item.filename);
                 this.imageCache.set(item.name, blockImage);
             }
 
-            compositeArray.push({ top: 32*y, left: 32*x, input: blockImage });
+            compositeArray.push({ top: 32*y, left: 32*x, input: await blockImage.toBuffer() });
 
             if (!blocksNeeded[item.name])
                 blocksNeeded[item.name] = 0;
