@@ -7,7 +7,7 @@ class Config {
     static ADMINS = Config.parseList(process.env.ADMINS, [
         "186459664974741504", // Aldople
         "461564949768962048", // Kaluub
-        //"264660321770274837", // Maeve
+        "264660321770274837", // Maeve
         "740098549470986310", // Exil
         "1102767840999772180", // PIXELLOX
         "566235326100799490", // lokalapsi
