@@ -10,7 +10,7 @@ class MessageHandler {
         const messageSplit = message.content.toLowerCase();
         // TODO: message tags.
         if (Date.now() > 1702458000000) return;
-        if ((messageSplit.includes("xmas booster") || messageSplit.includes("christmas booster")) && (messageSplit.includes("not available") || messageSplit.includes("not working") || messageSplit.includes("broken") || messageSplit.includes("error"))) {
+        if ((messageSplit.includes("booster") || messageSplit.includes("xmas")) && (messageSplit.includes("not available") || messageSplit.includes("not working") || messageSplit.includes("broken") || messageSplit.includes("error"))) {
             message.reply({content: "⛔ The Xmas booster is not available yet! See an update posted here: https://discord.com/channels/399918427256520705/399964862131994644/1183742241131462697"})
         }
     }
