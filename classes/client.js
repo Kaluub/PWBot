@@ -22,7 +22,7 @@ class DiscordClient extends Client {
         this.on("interactionCreate", this.interactionHandler.handleInteraction.bind(this.interactionHandler));
         this.on("guildMemberAdd", this.newMemberHandler.handleNewMember.bind(this.newMemberHandler));
         this.on("guildMemberRemove", this.removedMemberHandler.handleRemovedMember.bind(this.removedMemberHandler));
-        this.on("messageCreate", this.messageHandler.handleMessage.bind(this.messageHandler));
+        // this.on("messageCreate", this.messageHandler.handleMessage.bind(this.messageHandler)); // Not needed right now.
     }
 
     async connectStorage() {

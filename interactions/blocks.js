@@ -1,15 +1,15 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
 import { AttachmentBuilder, ChatInputCommandInteraction, EmbedBuilder, InteractionType, SlashCommandAttachmentOption, SlashCommandBuilder, SlashCommandIntegerOption, SlashCommandStringOption } from "discord.js";
 import Locale from "../classes/locale.js";
-import sharp from "sharp";
+import { createCanvas, loadImage } from 'canvas';
 import blockMap from "../gen/blockmap.json" assert { type: "json" };
+import fetch from 'node-fetch';
 
 const maxWidth = 80;
 const maxHeight = 57;
 
 class BlocksInteraction extends DefaultInteraction {
     static name = "blocks";
-    static disabled = true;
     static applicationCommand = new SlashCommandBuilder()
         .setName(BlocksInteraction.name)
         .setDescription("Transform an image into in-game blocks.")
@@ -22,7 +22,7 @@ class BlocksInteraction extends DefaultInteraction {
         .addStringOption(
             new SlashCommandStringOption()
                 .setName("style")
-                .setDescription("The style rule for your blocks to use. Default: Pixel backbrounds only")
+                .setDescription("The style rule for your blocks to use. Default: Pixel backgrounds only")
                 .setRequired(false)
                 .setChoices(
                     {
@@ -30,7 +30,7 @@ class BlocksInteraction extends DefaultInteraction {
                         value: "all"
                     },
                     {
-                        name: "Pixel backbrounds only",
+                        name: "Pixel backgrounds only",
                         value: "pixel_backgrounds_only",
                     },
                     {
@@ -65,7 +65,6 @@ class BlocksInteraction extends DefaultInteraction {
 
     static allowedContentTypes = ["image/png", "image/jpeg", "image/webp"];
 
-
     /**
      * @param {ChatInputCommandInteraction} interaction 
      */
@@ -90,10 +89,10 @@ class BlocksInteraction extends DefaultInteraction {
         if (!rawData.ok)
             return Locale.text(interaction, "FAILED_FETCH_IMAGE");
         
-        const buffer = await rawData.arrayBuffer();
+        const buffer = await rawData.buffer();
 
-        const image = sharp(buffer);
-        const metadata = await image.metadata();
+        const image = await loadImage(buffer);
+        const metadata = { width: image.width, height: image.height };
 
         const ratio = Math.min(maxWidth / metadata.width, maxHeight / metadata.height);
         if (!width)
@@ -106,19 +105,20 @@ class BlocksInteraction extends DefaultInteraction {
             height = metadata.height;
         }
         
-        image.resize(width, height);
+        const canvas = createCanvas(width, height);
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(image, 0, 0, width, height);
 
-        const resizedBuffer = await image.removeAlpha().raw().toBuffer();
-        const pixelArray = new Uint8ClampedArray(resizedBuffer);
+        const pixelArray = ctx.getImageData(0, 0, width, height).data;
 
-        const output = sharp({ create: { width: 32*width, height: 32*height, channels: 3, background: 'black' } });
-        const compositeArray = [];
+        const outputCanvas = createCanvas(32 * width, 32 * height);
+        const outputCtx = outputCanvas.getContext('2d');
 
         let blocksNeeded = {};
 
         let x = 0;
         let y = 0;
-        for (let i = 0; i < pixelArray.length; i += 3) {
+        for (let i = 0; i < pixelArray.length; i += 4) {
             const r = pixelArray[i];
             const g = pixelArray[i + 1];
             const b = pixelArray[i + 2];
@@ -128,11 +128,11 @@ class BlocksInteraction extends DefaultInteraction {
 
             // Cache it if not yet done
             if (!blockImage) {
-                blockImage = sharp("./assets/blocks/" + item.filename);
+                blockImage = await loadImage("./assets/blocks/" + item.filename);
                 this.imageCache.set(item.name, blockImage);
             }
 
-            compositeArray.push({ top: 32*y, left: 32*x, input: await blockImage.toBuffer() });
+            outputCtx.drawImage(blockImage, 32 * x, 32 * y, 32, 32);
 
             if (!blocksNeeded[item.name])
                 blocksNeeded[item.name] = 0;
@@ -145,11 +145,8 @@ class BlocksInteraction extends DefaultInteraction {
             }
         }
 
-        output.composite(compositeArray).png();
-        const outputBuffer = await output.toBuffer();
-
-        const blocksImage = new AttachmentBuilder(outputBuffer)
-            .setName("blocks.png")
+        const blocksImage = new AttachmentBuilder(outputCanvas.toBuffer('image/png'))
+            .setName("blocks.png");
         
         let blocksNeededString = "Blocks needed for the build:";
         for (const name in blocksNeeded) {
@@ -158,15 +155,15 @@ class BlocksInteraction extends DefaultInteraction {
         }
 
         const blocksNeededAttachment = new AttachmentBuilder(Buffer.from(blocksNeededString))
-            .setName("requirements.txt")
+            .setName("requirements.txt");
         
         const embed = new EmbedBuilder()
             .setTitle("Result:")
             .setColor("#66AABB")
             .setDescription(`Stats:\nWidth: ${width} blocks\nHeight: ${height} blocks\nBlocks needed: ${width * height} blocks`)
-            .setImage("attachment://blocks.png")
+            .setImage("attachment://blocks.png");
 
-        return { embeds: [embed], files: [blocksImage, blocksNeededAttachment] }
+        return { embeds: [embed], files: [blocksImage, blocksNeededAttachment] };
     }
 
     determineClosestColor(r, g, b, list) {

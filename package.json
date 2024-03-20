@@ -1,15 +1,15 @@
 {
   "name": "pwbot",
   "version": "1.0.0",
-  "description": "Nothing to see here.",
+  "description": "Bot used for PWG server.",
   "main": "app.js",
   "type": "module",
   "author": "Kaluub",
   "license": "ISC",
   "dependencies": {
+    "canvas": "^2.11.2",
     "discord.js": "^14.11.0",
     "dotenv": "^16.3.1",
-    "pg": "^8.11.1",
-    "sharp": "^0.32.4"
+    "pg": "^8.11.1"
   }
 }
