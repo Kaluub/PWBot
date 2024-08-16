@@ -1,11 +1,11 @@
-import DefaultInteraction from "../classes/defaultInteraction.js";
+import DefaultInteraction from "../../classes/defaultInteraction.js";
 import { ApplicationCommandType, ContextMenuCommandBuilder, InteractionType } from "discord.js";
-import Locale from "../classes/locale.js";
-import Config from "../classes/config.js";
+import Locale from "../../classes/locale.js";
+import config from "../../classes/config.js";
 
 class CleanMessagesInteraction extends DefaultInteraction {
     static name = "Clean messages to here";
-    static guilds = [...Config.HOME_SERVERS];
+    static guilds = [...config.home_servers];
     static applicationCommand = new ContextMenuCommandBuilder()
         .setDefaultMemberPermissions("0")
         .setName(CleanMessagesInteraction.name)
@@ -18,8 +18,11 @@ class CleanMessagesInteraction extends DefaultInteraction {
     }
 
     async execute(interaction) {
-        if (!Config.ADMINS.includes(interaction.user.id))
+        // TODO: Should allow anyone with Manage Messages permission.
+        if (!config.admins.includes(interaction.user.id)) {
             return {ephemeral: true, content: Locale.text(interaction, "NO_PERMISSION")};
+        }
+
         try {
             const channel = await interaction.client.channels.fetch(interaction.channelId);
             const messages = await channel.messages.fetch({after: interaction.targetMessage.id, limit: 100});

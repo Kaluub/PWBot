@@ -1,11 +1,11 @@
-import DefaultInteraction from "../classes/defaultInteraction.js";
+import DefaultInteraction from "../../classes/defaultInteraction.js";
 import { InteractionType, SlashCommandBuilder, SlashCommandSubcommandBuilder, SlashCommandUserOption } from "discord.js";
-import Config from "../classes/config.js";
-import Locale from "../classes/locale.js";
+import config from "../../classes/config.js";
+import Locale from "../../classes/locale.js";
 
 class BlacklistInteraction extends DefaultInteraction {
     static name = "blacklist";
-    static guilds = [...Config.HOME_SERVERS];
+    static guilds = [...config.home_servers];
     static applicationCommand = new SlashCommandBuilder()
         .setDefaultMemberPermissions("0")
         .setName(BlacklistInteraction.name)
@@ -49,7 +49,7 @@ class BlacklistInteraction extends DefaultInteraction {
     }
 
     async execute(interaction) {
-        if (!Config.ADMINS.includes(interaction.user.id))
+        if (!config.admins.includes(interaction.user.id))
             return {ephemeral: true, content: Locale.text(interaction, "NO_PERMISSION")};
         
         const subcommand = interaction.options.getSubcommand();

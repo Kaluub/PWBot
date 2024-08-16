@@ -1,11 +1,11 @@
-import DefaultInteraction from "../classes/defaultInteraction.js";
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, InteractionType, ModalBuilder, SlashCommandBuilder, SlashCommandChannelOption, TextInputBuilder, TextInputStyle } from "discord.js";
-import Config from "../classes/config.js";
-import Locale from "../classes/locale.js";
+import DefaultInteraction from "../../classes/defaultInteraction.js";
+import { ActionRowBuilder, ButtonBuilder, InteractionType, ModalBuilder, SlashCommandBuilder, SlashCommandChannelOption, TextInputBuilder, TextInputStyle } from "discord.js";
+import config from "../../classes/config.js";
+import Locale from "../../classes/locale.js";
 
 class SendInteraction extends DefaultInteraction {
     static name = "send";
-    static guilds = [...Config.HOME_SERVERS];
+    static guilds = [...config.home_servers];
     static applicationCommand = new SlashCommandBuilder()
         .setName(SendInteraction.name)
         .setDescription("Send a message through the bot.")
@@ -21,15 +21,17 @@ class SendInteraction extends DefaultInteraction {
     }
 
     async execute(interaction) {
-        if (!Config.ADMINS.includes(interaction.user.id))
+        if (!config.admins.includes(interaction.user.id)) {
             return {ephemeral: true, content: Locale.text(interaction, "NO_PERMISSION")};
+        }
 
         if (interaction.isChatInputCommand()) {
             const channel = interaction.options.getChannel("channel", false) ??
                 await interaction.client.channels.fetch(interaction.channelId);
             
-            if (!channel.isTextBased())
+            if (!channel.isTextBased()) {
                 return {ephemeral: true, content: Locale.text(interaction, "NOT_TEXT_CHANNEL")};
+            }
 
             const modal = new ModalBuilder()
                 .setCustomId("send/" + channel.id)
@@ -74,8 +76,9 @@ class SendInteraction extends DefaultInteraction {
             const buttons = interaction.fields.getTextInputValue("buttons") ?? undefined;
             
             let options = { content };
-            if (reply)
+            if (reply) {
                 options.reply = { messageReference: reply, failIfNotExists: false };
+            }
             if (buttons) {
                 const actionRow = new ActionRowBuilder();
                 const buttonArray = buttons.split("/");

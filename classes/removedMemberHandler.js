@@ -1,5 +1,5 @@
 import { GuildMember } from "discord.js";
-import Config from "./config.js";
+import config from "./config.js";
 
 class RemovedMemberHandler {
     /**
@@ -7,9 +7,10 @@ class RemovedMemberHandler {
      * @param {GuildMember} member 
      */
     async handleRemovedMember(member) {
-        const channel = await member.client.channels.fetch(Config.LOG_CHANNEL);
-        if (channel.guild.id !== member.guild.id)
+        const channel = await member.client.channels.fetch(config.log_channel);
+        if (channel.guild.id !== member.guild.id) {
             return;
+        }
         
         const joinedAt = Math.floor(member.joinedTimestamp / 1000);
         const username = member.user.discriminator === "0" ? member.user.username : member.user.tag;

@@ -1,5 +1,5 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
-import { AttachmentBuilder, ChatInputCommandInteraction, EmbedBuilder, InteractionType, SlashCommandAttachmentOption, SlashCommandBuilder, SlashCommandIntegerOption, SlashCommandStringOption } from "discord.js";
+import { AttachmentBuilder, ChatInputCommandInteraction, EmbedBuilder, InteractionType, SlashCommandAttachmentOption, SlashCommandBooleanOption, SlashCommandBuilder, SlashCommandIntegerOption, SlashCommandStringOption } from "discord.js";
 import Locale from "../classes/locale.js";
 import { createCanvas, loadImage } from 'canvas';
 import blockMap from "../gen/blockmap.json" assert { type: "json" };
@@ -44,7 +44,7 @@ class BlocksInteraction extends DefaultInteraction {
                 .setName("width")
                 .setDescription("Width in blocks of the output image. Default: Automatic")
                 .setMinValue(1)
-                .setMaxValue(80)
+                .setMaxValue(200)
                 .setRequired(false)
         )
         .addIntegerOption(
@@ -52,7 +52,7 @@ class BlocksInteraction extends DefaultInteraction {
                 .setName("height")
                 .setDescription("Height in blocks of the output image. Default: Automatic")
                 .setMinValue(1)
-                .setMaxValue(57)
+                .setMaxValue(200)
                 .setRequired(false)
         )
         
@@ -94,15 +94,19 @@ class BlocksInteraction extends DefaultInteraction {
         const image = await loadImage(buffer);
         const metadata = { width: image.width, height: image.height };
 
-        const ratio = Math.min(maxWidth / metadata.width, maxHeight / metadata.height);
-        if (!width)
-            width = Math.floor(metadata.width * ratio);
-        if (!height)
-            height = Math.floor(metadata.height * ratio);
-        
         if (maxWidth >= metadata.width && maxHeight >= metadata.height && noCustomSize) {
             width = metadata.width;
             height = metadata.height;
+        } else if (noCustomSize) {
+            const ratio = Math.min(maxWidth / metadata.width, maxHeight / metadata.height);
+            width = Math.floor(metadata.width * ratio);
+            height = Math.floor(metadata.height * ratio);
+        } else if (width == null) {
+            // Height can't be null.
+            width = Math.floor(metadata.width * height / metadata.height);
+        } else if (height == null) {
+            // Width can't be null.
+            height = Math.floor(metadata.height * width / metadata.width);
         }
         
         const canvas = createCanvas(width, height);
@@ -134,8 +138,9 @@ class BlocksInteraction extends DefaultInteraction {
 
             outputCtx.drawImage(blockImage, 32 * x, 32 * y, 32, 32);
 
-            if (!blocksNeeded[item.name])
+            if (!blocksNeeded[item.name]) {
                 blocksNeeded[item.name] = 0;
+            }
             blocksNeeded[item.name] += 1;
 
             x += 1;
@@ -162,6 +167,11 @@ class BlocksInteraction extends DefaultInteraction {
             .setColor("#66AABB")
             .setDescription(`Stats:\nWidth: ${width} blocks\nHeight: ${height} blocks\nBlocks needed: ${width * height} blocks`)
             .setImage("attachment://blocks.png");
+        
+        if (width > maxWidth || height > maxHeight) {
+            // Add size warning.
+            embed.addFields({name: "Warning:", value: "You provided a custom width or height which exceeds the maximum dimensions of in-game worlds. You can not build this!"});
+        }
 
         return { embeds: [embed], files: [blocksImage, blocksNeededAttachment] };
     }

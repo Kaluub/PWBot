@@ -1,7 +1,7 @@
-import DefaultInteraction from "../classes/defaultInteraction.js";
+import DefaultInteraction from "../../classes/defaultInteraction.js";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, InteractionType, ModalBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
-import Utils from "../classes/utils.js";
-import Config from "../classes/config.js";
+import Utils from "../../classes/utils.js";
+import config from "../../classes/config.js";
 
 class AppealInteraction extends DefaultInteraction {
     static name = "appeal";
@@ -164,7 +164,7 @@ class AppealInteraction extends DefaultInteraction {
                     appealReplyRows
                 );
 
-                const channel = interaction.client.channels.cache.get(Config.APPEAL_CHANNEL);
+                const channel = interaction.client.channels.cache.get(config.appeal_channel);
                 const message = await channel.messages.fetch(appeal.message_id);
 
                 await message.edit({

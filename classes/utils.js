@@ -9,9 +9,15 @@ const appealStateColors = {
 
 class Utils {
     static hasPermission(interaction, permission, user) {
-        if (!interaction) return false;
-        if (!interaction.guild) return true;
-        if (interaction.channel.permissionsFor(user).has(permission)) return true;
+        if (!interaction) {
+            return false;
+        }
+        if (!interaction.guild) {
+            return true;
+        }
+        if (interaction.channel.permissionsFor(user).has(permission)) {
+            return true;
+        }
         return false;
     }
     

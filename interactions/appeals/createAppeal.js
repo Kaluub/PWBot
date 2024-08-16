@@ -1,7 +1,7 @@
-import DefaultInteraction from "../classes/defaultInteraction.js";
+import DefaultInteraction from "../../classes/defaultInteraction.js";
 import { ActionRowBuilder, InteractionType, ModalBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
-import Utils from "../classes/utils.js";
-import Config from "../classes/config.js";
+import Utils from "../../classes/utils.js";
+import config from "../../classes/config.js";
 
 class CreateAppealInteraction extends DefaultInteraction {
     static name = "create-appeal";
@@ -41,7 +41,7 @@ class CreateAppealInteraction extends DefaultInteraction {
                 []
             );
             
-            const channel = interaction.client.channels.cache.get(Config.APPEAL_CHANNEL);
+            const channel = interaction.client.channels.cache.get(config.appeal_channel);
             const message = await channel.send({
                 embeds: [embed],
                 components: [actionBarOne, actionBarTwo]

@@ -1,14 +1,14 @@
 import pg from "pg";
-import Config from "./config.js";
+import config from "./config.js";
 
 class Storage {
     constructor() {
         this.client = new pg.Client({
-            host: Config.POSTGRES_HOST,
-            port: Config.POSTGRES_PORT,
-            user: Config.POSTGRES_USER,
-            password: Config.POSTGRES_PASSWORD,
-            database: Config.POSTGRES_DATABASE
+            host: config.postgres_host,
+            port: config.postgres_port,
+            user: config.postgres_user,
+            password: config.postgres_password,
+            database: config.postgres_database
         });
     }
 

@@ -1,11 +1,11 @@
-import DefaultInteraction from "../classes/defaultInteraction.js";
+import DefaultInteraction from "../../classes/defaultInteraction.js";
 import { ActionRowBuilder, ApplicationCommandType, ButtonBuilder, ContextMenuCommandBuilder, InteractionType, ModalBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
-import Locale from "../classes/locale.js";
-import Config from "../classes/config.js";
+import Locale from "../../classes/locale.js";
+import config from "../../classes/config.js";
 
 class EditInteraction extends DefaultInteraction {
     static name = "Edit message";
-    static guilds = [...Config.HOME_SERVERS];
+    static guilds = [...config.home_servers];
     static applicationCommand = new ContextMenuCommandBuilder()
         .setDefaultMemberPermissions("0")
         .setName(EditInteraction.name)
@@ -16,7 +16,7 @@ class EditInteraction extends DefaultInteraction {
     }
 
     async execute(interaction) {
-        if (!Config.ADMINS.includes(interaction.user.id))
+        if (!config.admins.includes(interaction.user.id))
             return {ephemeral: true, content: Locale.text(interaction, "NO_PERMISSION")};
         
         if (interaction.isContextMenuCommand()) {

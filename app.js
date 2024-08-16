@@ -4,5 +4,6 @@ const client = new DiscordClient();
 await client.connectStorage();
 await client.clientLogin();
 
-if (process.argv.includes("-i"))
-    await client.updateInteractions();
+if (process.argv.includes("-i")) {
+    client.updateInteractions();
+}

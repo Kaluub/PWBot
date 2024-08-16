@@ -1,5 +1,5 @@
 import { GuildMember } from "discord.js";
-import Config from "./config.js";
+import config from "./config.js";
 
 class NewMemberHandler {
     constructor() {
@@ -11,9 +11,10 @@ class NewMemberHandler {
      * @param {GuildMember} member 
      */
     async handleNewMember(member) {
-        const channel = await member.client.channels.fetch(Config.LOG_CHANNEL);
-        if (channel.guild.id !== member.guild.id)
+        const channel = await member.client.channels.fetch(config.log_channel);
+        if (channel.guild.id !== member.guild.id) {
             return;
+        }
 
         const createdAt = Math.floor(member.user.createdTimestamp / 1000);
         const username = member.user.discriminator === "0" ? member.user.username : member.user.tag;
@@ -44,10 +45,12 @@ class NewMemberHandler {
         const warningTemplate = `\n:triangular_flag_on_post: Warning: `;
         const noteTemplate = `\n:pencil: Note: `;
 
-        if (warnings.length)
+        if (warnings.length) {
             content += warningTemplate + warnings.join(warningTemplate);
-        if (notes.length)
+        }
+        if (notes.length) {
             content += noteTemplate + notes.join(noteTemplate);
+        }
         
         channel.send({ content: content });
     }

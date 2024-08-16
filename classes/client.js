@@ -1,5 +1,5 @@
 import { Client, IntentsBitField } from "discord.js";
-import Config from "./config.js";
+import config from "./config.js";
 import InteractionHandler from "./interactionHandler.js";
 import NewMemberHandler from "./newMemberHandler.js";
 import Storage from "./postgres.js";
@@ -31,7 +31,7 @@ class DiscordClient extends Client {
     }
 
     async clientLogin() {
-        await this.login(Config.TOKEN);
+        await this.login(config.token);
         console.log("Client logged in.");
     }
 
