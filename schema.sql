@@ -31,6 +31,7 @@ CREATE TABLE action_log (
     created_at TIMESTAMP NOT NULL DEFAULT now(),
     target_id TEXT NOT NULL,
     author_id TEXT NOT NULL,
+    guild_id TEXT NOT NULL,
     duration INTEGER NOT NULL,
     reason TEXT,
     log_message_id TEXT
@@ -39,6 +40,7 @@ CREATE TABLE action_log (
 CREATE TABLE temp_ban (
     action_id INTEGER UNIQUE PRIMARY KEY,
     user_id TEXT NOT NULL,
+    guild_id TEXT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT now(),
     duration INTEGER NOT NULL
 );
@@ -46,6 +48,7 @@ CREATE TABLE temp_ban (
 CREATE TABLE temp_mute (
     action_id INTEGER UNIQUE PRIMARY KEY,
     user_id TEXT NOT NULL,
+    guild_id TEXT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT now(),
     duration INTEGER NOT NULL
 );
